@@ -38,6 +38,7 @@
                 })
             },
             updateBusLiveLocations() {
+                if (this.bus_name === "") return
                 axios.get(this.$hostname + "ActiveBus?token=8UVANBHAKJNK&route_code=" + this.bus_name)
                 .then(res => {
                     this.bus_live_locations = res.data["ActiveBusResult"]["activebus"]

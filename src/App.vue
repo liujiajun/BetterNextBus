@@ -36,7 +36,8 @@
                                 :input-value="selected"
                                 color="blue-grey"
                                 class="white--text"
-                                v-on="on"
+                                close
+                                @click:close="selected_bus_stop_name=''"
                         >
                             <v-icon left>mdi-bus-stop</v-icon>
                             <span v-text="item.short_name"></span>

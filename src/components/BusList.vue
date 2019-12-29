@@ -114,11 +114,9 @@
         this.buses[cardIndex].show_map = !this.buses[cardIndex].show_map
       }
     },
-    computed: {
-
-    },
     watch: {
       'bus_stop_name':function (newVal) {
+        if (newVal === "") return
         this.$emit("onLoadingStateChange", true)
         axios.get(this.$hostname + "ShuttleService?busstopname=" + newVal)
                 .then(response => {

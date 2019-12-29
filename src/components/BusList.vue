@@ -1,58 +1,150 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div id="bus-list">
+    <v-container fluid>
+      <v-row dense>
+        <v-col v-for="(bus, i) in buses"
+               :key="i"
+               :cols="12"
+        >
+          <v-card
+                  color="teal"
+                  dark>
+            <v-list-item two-line>
+              <v-list-item-avatar color="white" size="48">
+                <v-icon color="teal">mdi-bus</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-content>
+                <v-container class="pa-0">
+                  <v-row justify="space-between">
+                    <v-col cols="7">
+                      <v-list-item-title class="headline">{{bus.name}}</v-list-item-title>
+                    </v-col>
+                    <v-col cols="5">
+                      <v-list-item-title class="headline">
+                        <span class="headline">{{bus.arrival_time}}</span>
+                        <span v-if="bus.arrival_time=='1'"> min</span>
+                        <span v-if="bus.arrival_time!='1' && bus.arrival_time!='Arr' && bus.arrival_time!='-'"> mins </span>
+                      </v-list-item-title>
+                      <v-list-item-subtitle>
+                        <span>{{bus.next_arrival_time}}</span>
+                        <span v-if="bus.next_arrival_time=='1'"> min</span>
+                        <span v-if="bus.next_arrival_time!='1' && bus.next_arrival_time!='Arr' && bus.next_arrival_time!='-'"> mins </span>
+                      </v-list-item-subtitle>
+                    </v-col>
+                  </v-row>
+                </v-container>
+<!--                <v-list-item-title class="headline">{{bus.name}}</v-list-item-title>-->
+                <!--                <v-list-item-subtitle>-->
+<!--                  <span class="headline">{{bus.arrival_time}}</span>-->
+<!--                  <span v-if="bus.arrival_time=='1'"> min</span>-->
+<!--                  <span v-if="bus.arrival_time!='1' && bus.arrival_time!='Arr' && bus.arrival_time!='-'"> mins </span>-->
+<!--                </v-list-item-subtitle>-->
+<!--                <v-list-item-subtitle>-->
+<!--                  <span class="headline">{{bus.next_arrival_time}}</span>-->
+<!--                  <span v-if="bus.next_arrival_time=='1'"> min</span>-->
+<!--                  <span v-if="bus.next_arrival_time!='1' && bus.next_arrival_time!='Arr' && bus.next_arrival_time!='-'"> mins </span>-->
+<!--                </v-list-item-subtitle>-->
+              </v-list-item-content>
+            </v-list-item>
+            <v-expand-transition>
+              <div v-if="buses[i].show_map">
+                <route-map :routes="routes" :bus="buses[i].name" :stop="bus_stop_name"></route-map>
+              </div>
+            </v-expand-transition>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                      text
+                      @click="showMap(i)"
+              >
+                LIVE MAP
+                <v-icon>{{ buses[i].show_map ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+  import axios from "axios"
+  import RouteMap from "@/components/RouteMap";
+  require('promise.prototype.finally').shim();
+  //AIzaSyBx7hn_RmpcwMh7yJVH2JFzo29Oj9EnKOU
+
+  export default {
+    name: 'bus-list',
+    // eslint-disable-next-line vue/no-unused-components
+    components: {RouteMap},
+    props: {
+      bus_stop_name: String,
+      routes: Array
+    },
+    created() {
+      this.timer = setInterval(this.updateBusTiming, 30000)
+    },
+    data() {
+      return {
+        buses: [],
+        timer: '',
+        bus_routes: this.routes
+      }
+    },
+    methods: {
+      updateBusTiming() {
+        if (this.bus_stop_name === "" || this.bus_stop_name == null) return
+
+        axios.get(this.$hostname + "ShuttleService?busstopname=" + this.bus_stop_name)
+                .then(response => {
+                  response.data["ShuttleServiceResult"]["shuttles"].forEach(
+                          element => {
+                            for (let i = 0; i<this.buses.length; i++) {
+                              if (this.buses[i].name === element["name"]) {
+                                this.buses[i].arrival_time = element["arrivalTime"]
+                                this.buses[i].next_arrival_time = element["nextArrivalTime"]
+                              }
+                            }
+                          }
+                  )
+                })
+      },
+      showMap(cardIndex) {
+        this.buses[cardIndex].show_map = !this.buses[cardIndex].show_map
+      }
+    },
+    computed: {
+
+    },
+    watch: {
+      'bus_stop_name':function (newVal) {
+        this.$emit("onLoadingStateChange", true)
+        axios.get(this.$hostname + "ShuttleService?busstopname=" + newVal)
+                .then(response => {
+                  this.buses = [];
+                  response.data["ShuttleServiceResult"]["shuttles"].forEach(
+                          element => {
+                            this.buses.push({
+                              name: element["name"],
+                              arrival_time: element["arrivalTime"],
+                              next_arrival_time: element["nextArrivalTime"],
+                              show_map: false
+                            })
+                          }
+                  )
+                })
+                .finally(() => {
+                  this.$emit("onLoadingStateChange", false)
+                })
+      }
+    },
+    beforeDestroy () {
+      clearInterval(this.timer)
+    }
+  };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style>
+
 </style>

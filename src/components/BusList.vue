@@ -2,7 +2,7 @@
   <div id="bus-list">
     <v-container fluid>
       <v-row dense>
-        <v-col v-for="(bus, i) in buses"
+        <v-col v-for="(service, i) in service_timings"
                :key="i"
                :cols="12"
         >
@@ -17,18 +17,18 @@
                 <v-container class="pa-0">
                   <v-row justify="space-between">
                     <v-col cols="7">
-                      <v-list-item-title class="headline">{{bus.name}}</v-list-item-title>
+                      <v-list-item-title class="headline">{{service.service_name}}</v-list-item-title>
                     </v-col>
                     <v-col cols="5">
                       <v-list-item-title class="headline">
-                        <span class="headline">{{bus.arrival_time}}</span>
-                        <span v-if="bus.arrival_time=='1'"> min</span>
-                        <span v-if="bus.arrival_time!='1' && bus.arrival_time!='Arr' && bus.arrival_time!='-'"> mins </span>
+                        <span class="headline">{{service.arrival_time}}</span>
+                        <span v-if="service.arrival_time=='1'"> min</span>
+                        <span v-if="service.arrival_time!='1' && service.arrival_time!='Arr' && service.arrival_time!='-'"> mins </span>
                       </v-list-item-title>
                       <v-list-item-subtitle>
-                        <span>{{bus.next_arrival_time}}</span>
-                        <span v-if="bus.next_arrival_time=='1'"> min</span>
-                        <span v-if="bus.next_arrival_time!='1' && bus.next_arrival_time!='Arr' && bus.next_arrival_time!='-'"> mins </span>
+                        <span>{{service.next_arrival_time}}</span>
+                        <span v-if="service.next_arrival_time=='1'"> min</span>
+                        <span v-if="service.next_arrival_time!='1' && service.next_arrival_time!='Arr' && service.next_arrival_time!='-'"> mins </span>
                       </v-list-item-subtitle>
                     </v-col>
                   </v-row>
@@ -47,8 +47,8 @@
               </v-list-item-content>
             </v-list-item>
             <v-expand-transition>
-              <div v-if="buses[i].show_map">
-                <route-map :routes="routes" :bus="buses[i].name" :stop="bus_stop_name"></route-map>
+              <div v-if="service_timings[i].show_map">
+                <route-map :routes="routes" :bus="service_timings[i].service_name" :stop="bus_stop_name"></route-map>
               </div>
             </v-expand-transition>
             <v-card-actions>
@@ -58,7 +58,7 @@
                       @click="showMap(i)"
               >
                 LIVE MAP
-                <v-icon>{{ buses[i].show_map ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                <v-icon>{{ service_timings[i].show_map ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -69,14 +69,14 @@
 </template>
 
 <script>
-  import axios from "axios"
+  // import axios from "axios"
+  import {RepositoryFactory} from "@/repository/reposiotry-factory";
   import RouteMap from "@/components/RouteMap";
   require('promise.prototype.finally').shim();
   //AIzaSyBx7hn_RmpcwMh7yJVH2JFzo29Oj9EnKOU
 
   export default {
     name: 'bus-list',
-    // eslint-disable-next-line vue/no-unused-components
     components: {RouteMap},
     props: {
       bus_stop_name: String,
@@ -87,54 +87,51 @@
     },
     data() {
       return {
-        buses: [],
+        service_timings: [],
         timer: '',
-        bus_routes: this.routes
+        service_routes: this.routes
       }
     },
     methods: {
-      updateBusTiming() {
-        if (this.bus_stop_name === "" || this.bus_stop_name == null) return
-
-        axios.get(this.$hostname + "ShuttleService?busstopname=" + this.bus_stop_name)
-                .then(response => {
-                  response.data["ShuttleServiceResult"]["shuttles"].forEach(
-                          element => {
-                            for (let i = 0; i<this.buses.length; i++) {
-                              if (this.buses[i].name === element["name"]) {
-                                this.buses[i].arrival_time = element["arrivalTime"]
-                                this.buses[i].next_arrival_time = element["nextArrivalTime"]
-                              }
-                            }
-                          }
-                  )
-                })
+      async updateBusTiming() {
+        if (this.bus_stop_name === "" || this.bus_stop_name == null) return;
+        let timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
+        timings.forEach(service => {
+          let found = this.service_timings.find(x => x.service_name === service.service_name);
+          if (found === undefined || found === null) return;
+          found.arrival_time = service.arrival_time;
+          found.next_arrival_time = service.next_arrival_time
+        });
       },
       showMap(cardIndex) {
-        this.buses[cardIndex].show_map = !this.buses[cardIndex].show_map
+        this.service_timings[cardIndex].show_map = !this.service_timings[cardIndex].show_map
       }
     },
     watch: {
-      'bus_stop_name':function (newVal) {
-        if (newVal === "") return
-        this.$emit("onLoadingStateChange", true)
-        axios.get(this.$hostname + "ShuttleService?busstopname=" + newVal)
-                .then(response => {
-                  this.buses = [];
-                  response.data["ShuttleServiceResult"]["shuttles"].forEach(
-                          element => {
-                            this.buses.push({
-                              name: element["name"],
-                              arrival_time: element["arrivalTime"],
-                              next_arrival_time: element["nextArrivalTime"],
-                              show_map: false
-                            })
-                          }
-                  )
-                })
-                .finally(() => {
-                  this.$emit("onLoadingStateChange", false)
-                })
+      'bus_stop_name':async function (newVal) {
+        if (newVal === "") return;
+        this.$emit("onLoadingStateChange", true);
+        this.service_timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
+
+        this.$emit("onLoadingStateChange", false);
+
+        // axios.get(this.$hostname + "ShuttleService?busstopname=" + newVal)
+        //         .then(response => {
+        //           this.service_timings = [];
+        //           response.data["ShuttleServiceResult"]["shuttles"].forEach(
+        //                   element => {
+        //                     this.service_timings.push({
+        //                       service_name: element["name"],
+        //                       arrival_time: element["arrivalTime"],
+        //                       next_arrival_time: element["nextArrivalTime"],
+        //                       show_map: false
+        //                     })
+        //                   }
+        //           )
+        //         })
+        //         .finally(() => {
+        //           this.$emit("onLoadingStateChange", false)
+        //         })
       }
     },
     beforeDestroy () {

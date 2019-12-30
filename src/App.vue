@@ -18,7 +18,6 @@
                         item-text="search_field"
                         item-value="name"
                         chips
-                        clearable
                         class="mx-4"
                         solo-inverted
                 >
@@ -96,7 +95,8 @@
 </template>
 
 <script>
-    import axios from "axios"
+    // import axios from "axios"
+    import {RepositoryFactory} from "@/repository/reposiotry-factory";
     import BusList from "@/components/BusList";
 
     export default {
@@ -105,63 +105,28 @@
             BusList
         },
         async created() {
-            //Get bus stops
-            this.loading = true
-            axios.get(this.$hostname + "BusStops")
-                .then((response) => response.data["BusStopsResult"]["busstops"].forEach(
-                    stop => {
-                        this.bus_stops.push({
-                            name: stop["name"],
-                            caption: stop["caption"],
-                            short_name: stop["ShortName"],
-                            long_name: stop["LongName"],
-                            search_field: stop["ShortName"] + stop["LongName"],
-                            latitude: stop["latitude"],
-                            longitude: stop["longitude"]
-                        })
-                    })
-                )
-                .then(() => this.loading = false)
-                .catch(e => {
-                    this.loading = false
-                    this.snackbar_message = "Timed out. Check Internet connection."
-                    this.snackbar = true
-                    // eslint-disable-next-line no-console
-                    console.log(e)
-            });
+            this.loading = true;
+            try {
+                this.bus_stops = await RepositoryFactory.get("busStops").get();
+                this.routes = await RepositoryFactory.get("serviceDescriptions").get();
+            } catch (e) {
+                this.snackbar_message = "Timed out. Check Internet connection.";
+                this.snackbar = true;
+            } finally {
+                this.loading = false
+            }
 
+            //this.updateBusStopsByDistance()
 
-            let res = await axios.get(this.$hostname + "ServiceDescription")
-
-            res.data["ServiceDescriptionResult"]["ServiceDescription"].forEach(route => {
-                this.routes.push({
-                    name: route["Route"],
-                    description: route["RouteDescription"],
-                    checkpoints: [],
-                    pickupPoints: []
-                })
-            })
-
-            this.routes.forEach(route => {
-                //Get checkpoints for route drawing
-                axios.get(this.$hostname + "CheckPoint?route_code=" + route.name)
-                    .then(checkPointRes => {
-                        checkPointRes.data["CheckPointResult"]["CheckPoint"].forEach(point => {
-                            route.checkpoints.push({lat: point["latitude"], lng: point["longitude"]})
-                        });
-                    })
-
-                //Get pickup bus stops
-                axios.get(this.$hostname + "PickupPoint?route_code=" + route.name)
-                    .then(pkPointRes => {
-                        pkPointRes.data["PickupPointResult"]["pickuppoint"].forEach(point => {
-                            route.pickupPoints.push({
-                                lat: point["lat"],
-                                lng: point["lng"],
-                                name: point["busstopcode"]})
-                        });
-                    })
-            })
+            try {
+                for (const route of this.routes) {
+                    route.check_points = await RepositoryFactory.get("checkPoints").get(route.service_name);
+                    route.pickup_points = await RepositoryFactory.get("pickupPoints").get(route.service_name);
+                }
+            } catch (e) {
+                this.snackbar_message = "Timed out. Check Internet connection.";
+                this.snackbar = true;
+            }
 
             // //Get routes
             // axios.get("https://nnextbus.nus.edu.sg/ServiceDescription",
@@ -221,8 +186,15 @@
                 try {
                     this.location = await this.getLocation();
                 } catch (e) {
-                    // eslint-disable-next-line no-console
-                    console.log(e)
+                    if (e.code === e.PERMISSION_DENIED) {
+                        this.snackbar_message = "Permission denied. Try enabling location service."
+                    } else if (e.code === e.POSITION_UNAVAILABLE || e.code === e.TIMEOUT) {
+                        this.snackbar_message = "Geolocation not available at the moment. Try again later."
+                    } else {
+                        this.snackbar_message = "Unknown error when getting geolocation."
+                    }
+                    this.snackbar = true
+                    this.loading = false
                 }
             },
             updateBusStopsByDistance: function () {
@@ -277,6 +249,7 @@
                             return 0
                         }
                     });
+                    this.setLoadingState(false)
                     this.selected_bus_stop_name = this.bus_stops[0].name
                 })
             }

@@ -8,7 +8,9 @@
 
 <script>
     import gmapsInit from '@/utils/gmaps';
-    import axios from "axios"
+    // import axios from "axios"
+    import {RepositoryFactory} from "@/repository/reposiotry-factory";
+
     require('promise.prototype.finally').shim();
 
     export default {
@@ -30,49 +32,36 @@
         methods: {
             getRoute(busName) {
                 this.bus_routes.forEach(route => {
-                    if (route.name === busName) {
+                    if (route.service_name === busName) {
                         // eslint-disable-next-line no-console
                         console.log(route)
                         return route
                     }
                 })
             },
-            updateBusLiveLocations() {
-                if (this.bus_name === "") return
-                axios.get(this.$hostname + "ActiveBus?token=8UVANBHAKJNK&route_code=" + this.bus_name)
-                .then(res => {
-                    this.bus_live_locations = res.data["ActiveBusResult"]["activebus"]
-                    // "vehplate": "PC 3787M",
-                    //  "lat": 1.291017,
-                    //  "lng": 103.781222,
-                    //  "speed": 0,
-                    //  "direction": 29
-                    for (let key in res.data["ActiveBusResult"]["activebus"]) {
-                        let bus = res.data["ActiveBusResult"]["activebus"][key]
-                        if (this.live_location_markers[bus["vehplate"]] == undefined) {
-                            // eslint-disable-next-line no-console
-                            console.log('initial' + bus["lat"] + " " + bus["lng"])
-                            this.live_location_markers[bus["vehplate"]] = new this.google.maps.Marker({
-                                position: new this.google.maps.LatLng(bus["lat"], bus["lng"]),
-                                icon: {
-                                    url: require("@/assets/busmarker_red.png"),
-                                    anchor: new this.google.maps.Point(18, 18)
-                                }
-                            });
-                            this.live_location_markers[bus["vehplate"]].setMap(this.gmap)
-                        } else {
-                            // eslint-disable-next-line no-console
-                            console.log('updating' + bus["lat"] + " " + bus["lng"])
-                            let marker = this.live_location_markers[bus["vehplate"]]
-                            marker.setPosition(new this.google.maps.LatLng(bus["lat"], bus["lng"]))
-                        }
+            async updateBusLiveLocations() {
+                if (this.bus_name === "") return;
+                let res = await RepositoryFactory.get("activeBus").get(this.bus_name);
+                for (let key in res) {
+                    let bus = res[key];
+                    if (this.live_location_markers[bus["vehplate"]] === undefined) {
+                        // eslint-disable-next-line no-console
+                        console.log('initial' + bus["lat"] + " " + bus["lng"]);
+                        this.live_location_markers[bus["vehplate"]] = new this.google.maps.Marker({
+                            position: new this.google.maps.LatLng(bus["lat"], bus["lng"]),
+                            icon: {
+                                url: require("@/assets/busmarker_red.png"),
+                                anchor: new this.google.maps.Point(18, 18)
+                            }
+                        });
+                        this.live_location_markers[bus["vehplate"]].setMap(this.gmap)
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log('updating' + bus["lat"] + " " + bus["lng"]);
+                        let marker = this.live_location_markers[bus["vehplate"]];
+                        marker.setPosition(new this.google.maps.LatLng(bus["lat"], bus["lng"]))
                     }
-
-                })
-                .catch(e => {
-                    // eslint-disable-next-line no-console
-                    console.log(e)
-                })
+                }
             }
         },
         async mounted() {
@@ -90,19 +79,19 @@
 
                 //Draw routes and pick up points
                 this.bus_routes.forEach(route => {
-                    if (route.name === this.bus_name) {
+                    if (route.service_name === this.bus_name) {
 
                         let routePath = new this.google.maps.Polyline({
-                            path: route.checkpoints,
+                            path: route.check_points,
                             geodesic: true,
                             strokeColor: 'teal',
                             strokeOpacity: 1.0,
                             strokeWeight: 2
-                        })
+                        });
 
-                        routePath.setMap(this.gmap)
+                        routePath.setMap(this.gmap);
 
-                        route.pickupPoints.forEach(point => {
+                        route.pickup_points.forEach(point => {
                             if (point.name === this.stop_name) {
                                 this.gmap.setCenter(point)
                             }
@@ -113,7 +102,7 @@
                             marker.setMap(this.gmap)
                         })
                     }
-                })
+                });
 
                 this.timer = setInterval(this.updateBusLiveLocations, 5000)
                 this.updateBusLiveLocations()

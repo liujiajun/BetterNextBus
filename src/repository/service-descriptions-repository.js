@@ -1,0 +1,19 @@
+import repository from "./repository"
+
+const RESOURCE = "/ServiceDescription";
+
+export default {
+    async get() {
+        let res = await repository.get(RESOURCE);
+        let routes = [];
+        res.data["ServiceDescriptionResult"]["ServiceDescription"].forEach(route => {
+            routes.push({
+                service_name: route["Route"],
+                description: route["RouteDescription"],
+                check_points: [],
+                pickup_points: []
+            })
+        });
+        return routes
+    }
+}

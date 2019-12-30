@@ -5,7 +5,24 @@
                     dark
                     color="teal"
             >
-                <v-toolbar-title class="title mr-6 hidden-sm-and-down">Better NextBus</v-toolbar-title>
+                <template v-slot:extension>
+                    <v-tabs
+                            fixed-tabs
+                            background-color="transparent"
+
+                    >
+                        <v-tabs-slider></v-tabs-slider>
+                        <v-tab
+                        >
+                            <v-icon>mdi-bus-stop</v-icon>
+                        </v-tab>
+                        <v-tab
+                        >
+                            <v-icon>mdi-map-search-outline</v-icon>
+                        </v-tab>
+                    </v-tabs>
+                </template>
+                <v-toolbar-title class="title mr-6 hidden-sm-and-down">BetterNextBus</v-toolbar-title>
                 <v-autocomplete
                         :items="bus_stops"
                         v-model="selected_bus_stop_name"
@@ -21,6 +38,7 @@
                         class="mx-4"
                         solo-inverted
                 >
+
                     <template v-slot:no-data>
                         <v-list-item>
                             <v-list-item-title>
@@ -84,7 +102,6 @@
                 </v-btn>
             </v-snackbar>
         </div>
-
         <bus-list
                 :bus_stop_name="selected_bus_stop_name"
                 :routes="routes"
@@ -95,7 +112,6 @@
 </template>
 
 <script>
-    // import axios from "axios"
     import {RepositoryFactory} from "@/repository/reposiotry-factory";
     import BusList from "@/components/BusList";
 
@@ -127,37 +143,6 @@
                 this.snackbar_message = "Timed out. Check Internet connection.";
                 this.snackbar = true;
             }
-
-            // //Get routes
-            // axios.get("https://nnextbus.nus.edu.sg/ServiceDescription",
-            //     {
-            //         auth: {
-            //             username: "NUSnextbus",
-            //             password: "13dL?zY,3feWR^\"T"
-            //         }
-            //     })
-            //     .then(response => response.data["ServiceDescriptionResult"]["ServiceDescription"].forEach(route => {
-            //         //Get checkpoints
-            //         axios.get("https://nnextbus.nus.edu.sg/CheckPoint?route_code=" + route["Route"],
-            //             {auth: {username: "NUSnextbus", password: "13dL?zY,3feWR^\"T"}})
-            //             .then(checkPointRes => {
-            //                 let _checkpoints = [];
-            //                 checkPointRes.data["CheckPointResult"]["CheckPoint"].forEach(point => {
-            //                     _checkpoints.push({lat: point["latitude"], lng: point["longitude"]})
-            //                 });
-            //                 this.routes.push({
-            //                     name: route["Route"],
-            //                     description: route["RouteDescription"],
-            //                     checkpoints: _checkpoints
-            //                 })
-            //             })
-            //
-            //         //Get pickup points
-            //
-            //     }
-            //         )
-            //     )
-
 
         },
         methods: {
@@ -263,6 +248,13 @@
                 location: null,
                 snackbar: false,
                 snackbar_message: ""
+            }
+        },
+        watch: {
+            "$route": function () {
+                // this.selected_bus_stop_name = this.$route.params.stop_name
+                // eslint-disable-next-line no-console
+                console.log("changed")
             }
         }
     };

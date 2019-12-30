@@ -120,6 +120,6 @@
 <style scoped>
     .route-map {
         height: 300px;
-        /*background: gray;*/
+        background: gray;
     }
 </style>

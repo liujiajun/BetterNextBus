@@ -1,10 +1,10 @@
 <template>
-    
+    <h1>Services</h1>
 </template>
 
 <script>
     export default {
-        name: "RouteList"
+        name: "service-list"
     }
 </script>
 

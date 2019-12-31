@@ -33,17 +33,6 @@
                     </v-col>
                   </v-row>
                 </v-container>
-<!--                <v-list-item-title class="headline">{{bus.name}}</v-list-item-title>-->
-                <!--                <v-list-item-subtitle>-->
-<!--                  <span class="headline">{{bus.arrival_time}}</span>-->
-<!--                  <span v-if="bus.arrival_time=='1'"> min</span>-->
-<!--                  <span v-if="bus.arrival_time!='1' && bus.arrival_time!='Arr' && bus.arrival_time!='-'"> mins </span>-->
-<!--                </v-list-item-subtitle>-->
-<!--                <v-list-item-subtitle>-->
-<!--                  <span class="headline">{{bus.next_arrival_time}}</span>-->
-<!--                  <span v-if="bus.next_arrival_time=='1'"> min</span>-->
-<!--                  <span v-if="bus.next_arrival_time!='1' && bus.next_arrival_time!='Arr' && bus.next_arrival_time!='-'"> mins </span>-->
-<!--                </v-list-item-subtitle>-->
               </v-list-item-content>
             </v-list-item>
             <v-expand-transition>
@@ -94,14 +83,19 @@
     },
     methods: {
       async updateBusTiming() {
-        if (this.bus_stop_name === "" || this.bus_stop_name == null) return;
-        let timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
-        timings.forEach(service => {
-          let found = this.service_timings.find(x => x.service_name === service.service_name);
-          if (found === undefined || found === null) return;
-          found.arrival_time = service.arrival_time;
-          found.next_arrival_time = service.next_arrival_time
-        });
+        if (this.bus_stop_name === "" || this.bus_stop_name === null || this.bus_stop_name === undefined) return;
+        try {
+          let timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
+          timings.forEach(service => {
+            let found = this.service_timings.find(x => x.service_name === service.service_name);
+            if (found === undefined || found === null) return;
+            found.arrival_time = service.arrival_time;
+            found.next_arrival_time = service.next_arrival_time
+          });
+        } catch (e) {
+          this.$emit("onLoadingStateChange", false)
+        }
+
       },
       showMap(cardIndex) {
         this.service_timings[cardIndex].show_map = !this.service_timings[cardIndex].show_map
@@ -111,10 +105,11 @@
       'bus_stop_name':async function (newVal) {
         if (newVal === "") return;
         this.$emit("onLoadingStateChange", true);
-        this.service_timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
-
-        this.$emit("onLoadingStateChange", false);
-
+        try {
+          this.service_timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
+        } finally {
+          this.$emit("onLoadingStateChange", false);
+        }
         // axios.get(this.$hostname + "ShuttleService?busstopname=" + newVal)
         //         .then(response => {
         //           this.service_timings = [];

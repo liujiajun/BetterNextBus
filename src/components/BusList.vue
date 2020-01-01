@@ -72,7 +72,11 @@
       routes: Array
     },
     created() {
-      this.timer = setInterval(this.updateBusTiming, 30000)
+      this.timer = setInterval(() => {
+        this.updateBusTiming(false)
+      }, 30000)
+      this.updateBusTiming(true)
+
     },
     data() {
       return {
@@ -82,8 +86,18 @@
       }
     },
     methods: {
-      async updateBusTiming() {
+      async updateBusTiming(refresh) {
         if (this.bus_stop_name === "" || this.bus_stop_name === null || this.bus_stop_name === undefined) return;
+
+        if (refresh) {
+          this.$emit("onLoadingStateChange", true);
+          try {
+            this.service_timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
+          } finally {
+            this.$emit("onLoadingStateChange", false);
+          }
+        }
+
         try {
           let timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
           timings.forEach(service => {
@@ -102,31 +116,8 @@
       }
     },
     watch: {
-      'bus_stop_name':async function (newVal) {
-        if (newVal === "") return;
-        this.$emit("onLoadingStateChange", true);
-        try {
-          this.service_timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.bus_stop_name);
-        } finally {
-          this.$emit("onLoadingStateChange", false);
-        }
-        // axios.get(this.$hostname + "ShuttleService?busstopname=" + newVal)
-        //         .then(response => {
-        //           this.service_timings = [];
-        //           response.data["ShuttleServiceResult"]["shuttles"].forEach(
-        //                   element => {
-        //                     this.service_timings.push({
-        //                       service_name: element["name"],
-        //                       arrival_time: element["arrivalTime"],
-        //                       next_arrival_time: element["nextArrivalTime"],
-        //                       show_map: false
-        //                     })
-        //                   }
-        //           )
-        //         })
-        //         .finally(() => {
-        //           this.$emit("onLoadingStateChange", false)
-        //         })
+      'bus_stop_name':async function () {
+        this.updateBusTiming(true)
       }
     },
     beforeDestroy () {

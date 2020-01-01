@@ -8,17 +8,18 @@
         >
           <template v-slot:extension>
             <v-tabs
-                    v-model="tabs"
-                    fixed-tabs
-                    background-color="transparent"
-
-            >
-              <v-tabs-slider></v-tabs-slider>
-              <v-tab>
+            v-model="active_tab"
+            fixed-tabs
+            background-color="transparent">
+              <v-tab 
+              :to="{ name: 'bus-list', params: {
+                bus_stop_name: selected_bus_stop_name,
+                routes: routes
+              } }"
+              >
                 <v-icon>mdi-bus-stop</v-icon>
               </v-tab>
-              <v-tab
-              >
+              <v-tab to="/services">
                 <v-icon>mdi-map-search-outline</v-icon>
               </v-tab>
             </v-tabs>
@@ -27,7 +28,10 @@
           <v-autocomplete
                   :items="bus_stops"
                   v-model="selected_bus_stop_name"
-                  v-on:input="$router.push('/stops/' + selected_bus_stop_name)"
+                  v-on:input="$router.push({ name: 'bus-list', params: {
+                    bus_stop_name: selected_bus_stop_name,
+                    routes: routes
+                  }})"
                   prepend-icon="mdi-magnify"
                   label="Which bus stop are you at?"
                   flat
@@ -104,46 +108,24 @@
           </v-btn>
         </v-snackbar>
       </div>
-<!--      <bus-list-->
-<!--              :bus_stop_name="selected_bus_stop_name"-->
-<!--              :routes="routes"-->
-<!--              @onLoadingStateChange="setLoadingState"-->
-<!--      />-->
-<!--      <service-list>-->
-
-<!--      </service-list>-->
-      <v-tabs-items
-              v-model="tabs">
-        <v-tab-item >
-          <bus-list
-                  :bus_stop_name="selected_bus_stop_name"
-                  :routes="routes"
-                  @onLoadingStateChange="setLoadingState"
-          />
-        </v-tab-item>
-        <v-tab-item>
-          <service-list>
-
-          </service-list>
-        </v-tab-item>
-      </v-tabs-items>
+      <router-view></router-view>
     </v-app>
   </div>
 </template>
 
 <script>
   import {RepositoryFactory} from "@/repository/reposiotry-factory";
-  import BusList from "@/components/BusList";
-  import ServiceList from "@/components/ServiceList";
+  // import BusList from "@/components/BusList";
+  // import ServiceList from "@/components/ServiceList";
 
   export default {
     name: 'App',
     components: {
-      BusList,
-      ServiceList,
+      // BusList,
+      // ServiceList,
     },
     mounted() {
-      this.selected_bus_stop_name = this.$route.params.stop_name
+      this.selected_bus_stop_name = this.$route.params.bus_stop_name
     },
     async created() {
       this.loading = true;
@@ -271,12 +253,12 @@
         location: null,
         snackbar: false,
         snackbar_message: "",
-        tabs: null
+        active_tab: "/stops",
       }
     },
     watch: {
-      "$route": function () {
-        this.selected_bus_stop_name = this.$route.params.stop_name
+      "stop_name": function (new_val) {
+        this.selected_bus_stop_name = new_val
       }
     }
   };

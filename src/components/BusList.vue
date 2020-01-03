@@ -37,7 +37,7 @@
             </v-list-item>
             <v-expand-transition>
               <div v-if="service_timings[i].show_map">
-                <route-map :routes="routes" :bus="service_timings[i].service_name" :stop="bus_stop_name"></route-map>
+                <route-map :bus="service_timings[i].service_name" :stop="bus_stop_name"></route-map>
               </div>
             </v-expand-transition>
             <v-card-actions>
@@ -68,12 +68,11 @@
     components: {RouteMap},
     props: {
       bus_stop_name: String,
-      routes: Array
     },
-    created() {
+    async created() {
       this.timer = setInterval(() => {
         this.updateBusTiming(false)
-      }, 30000)
+      }, 30000);
       this.updateBusTiming(true)
 
     },
@@ -81,7 +80,6 @@
       return {
         service_timings: [],
         timer: '',
-        service_routes: this.routes
       }
     },
     methods: {

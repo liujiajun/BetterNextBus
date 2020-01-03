@@ -1,43 +1,43 @@
 <template>
-    <v-tabs
-            fixed-tabs
-            background-color="transparent"
-            show-arrows
-    >
-        <v-tabs-slider color="teal"></v-tabs-slider>
-
-        <v-tab
+    <v-container>
+        <v-tabs
                 v-model="active_tab"
-                v-for="route in routes"
-                :key="route.service_name"
+                fixed-tabs
+                background-color="transparent"
+                show-arrows
         >
-            {{route.service_name}}
-        </v-tab>
-    </v-tabs>
+            <v-tabs-slider color="teal"></v-tabs-slider>
+            <v-tab
+                    v-for="service in $store.state.services"
+                    :key="service.service_name"
+                    @click="$store.commit('setAutocompleteSelected', service.service_name)"
+            >
+                {{service.service_name}}
+            </v-tab>
+        </v-tabs>
+        <router-view></router-view>
+    </v-container>
 </template>
 
 <script>
     export default {
         name: "service-list",
-        props: ["service_name", "routes"],
         data() {
             return {
-                active_tab: 5
+                active_tab: 0
+            }
+        },
+        created() {
+            let index = this.$store.state.services.findIndex(x => x.service_name === this.$route.params.service_name);
+            if (index === undefined) this.active_tab = index;
+        },
+        watch: {
+            "$store.state.service_selected": function (newVal) {
+                let index = this.$store.state.services.findIndex(x => x.service_name === newVal);
+                if (index === undefined) return;
+                this.active_tab = index;
             }
         }
-        // computed: {
-        //     active_tab: function () {
-        //         if (this.routes === undefined) {
-        //             return 0
-        //         }
-        //         for (let i=0; i<this.routes.length; i++) {
-        //             if (this.service_name === this.routes[i].service_name) {
-        //                 return i;
-        //             }
-        //         }
-        //         return 0;
-        //     }
-        // }
     }
 </script>
 

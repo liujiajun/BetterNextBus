@@ -15,13 +15,12 @@
 
     export default {
         name: "route-map",
-        props: ['bus', 'stop', 'routes'],
+        props: ['bus', 'stop'],
         data() {
             return {
                 mapName: this.stop + "-" + this.bus,
                 stop_name: this.stop,
                 bus_name: this.bus,
-                bus_routes: this.routes,
                 bus_live_locations: [],
                 live_location_markers: {},
                 gmap: null,
@@ -31,7 +30,7 @@
         },
         methods: {
             getRoute(busName) {
-                this.bus_routes.forEach(route => {
+                this.$store.state.services.forEach(route => {
                     if (route.service_name === busName) {
                         // eslint-disable-next-line no-console
                         console.log(route)
@@ -78,9 +77,8 @@
                 this.gmap = new this.google.maps.Map(element, options);
 
                 //Draw routes and pick up points
-                this.bus_routes.forEach(route => {
+                this.$store.state.services.forEach(route => {
                     if (route.service_name === this.bus_name) {
-
                         let routePath = new this.google.maps.Polyline({
                             path: route.check_points,
                             geodesic: true,

@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import ServiceList from '@/components/ServiceList'
 import BusList from '@/components/BusList'
+import ServiceCard from "@/components/ServiceCard";
 
 Vue.use(VueRouter)
 
@@ -33,8 +34,8 @@ const routes = [
         children: [
           {
             path: ':service_name',
-            name: 'service-list',
-            component: ServiceList,
+            name: 'service-card',
+            component: ServiceCard,
             props: true
           }
         ]

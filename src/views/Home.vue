@@ -13,12 +13,19 @@
             background-color="transparent">
 
               <v-tab
-              @click="$store.commit('setAutocompleteSelected', $store.state.stop_selected)"
+              @click="
+              $router.push({
+                name: 'bus-list',
+                params: {bus_stop_name: $store.state.stop_selected}})
+                .catch(e => console.log(e))"
               >
                 <v-icon>mdi-bus-stop</v-icon>
               </v-tab>
               <v-tab
-              @click="$store.commit('setAutocompleteSelected', $store.state.service_selected)"
+              @click="$router.push({
+                name: 'service-card',
+                params: {service_name: $store.state.service_selected}})
+                .catch(e => console.log(e))"
               >
                 <v-icon>mdi-map-search-outline</v-icon>
               </v-tab>
@@ -28,6 +35,7 @@
           <v-autocomplete
                   :items="autocomplete_items"
                   v-model="$store.state.autocomplete_selected"
+                  v-on:input="selectFromAutocomplete"
                   prepend-icon="mdi-magnify"
                   label="Which bus stop are you at?"
                   flat
@@ -198,9 +206,28 @@
         this.locate().then(() => {
           this.$store.commit("sortStops", this.location);
           this.setLoadingState(false);
-          this.$store.commit('setAutocompleteSelected', this.$store.state.stops[0].name)
+          // this.$store.commit('setAutocompleteSelected', this.$store.state.stops[0].name)
+          this.$router.push({
+            name: 'bus-list',
+            params: {bus_stop_name: this.$store.state.stops[0].name}})
+                  .catch(e => console.log(e))
         })
       },
+      selectFromAutocomplete() {
+        let found = this.autocomplete_items
+                .find(x => x.name === this.$store.state.autocomplete_selected);
+        if (found.type === 'stop') {
+          this.$router.push({
+            name: 'bus-list',
+            params: {bus_stop_name: this.$store.state.autocomplete_selected}})
+                  .catch(e => console.log(e))
+        } else {
+          this.$router.push({
+            name: 'service-list',
+            params: {service_name: this.$store.state.autocomplete_selected}})
+                  .catch(e => console.log(e))
+        }
+      }
     },
     data() {
       return {
@@ -213,33 +240,35 @@
     watch: {
       "$route.path": function () {
         if (this.$route.path.startsWith("/stops")) {
-          this.$store.commit('setAutocompleteSelected', this.$store.state.stop_selected)
+          this.$store.commit('setAutocompleteSelected', this.$route.params.bus_stop_name);
+          this.$store.commit("setStopSelected", this.$route.params.bus_stop_name);
         } else if (this.$route.path.startsWith("/services")) {
-          this.$store.commit('setAutocompleteSelected', this.$store.state.service_selected)
+          this.$store.commit('setAutocompleteSelected', this.$route.params.service_name);
+          this.$store.commit("setServiceSelected", this.$route.params.service_name);
         }
       },
-      "$store.state.autocomplete_selected": function (new_val) {
-        if (new_val === '') return;
-        if (this.$store.state.services.find(x => x.service_name === new_val)) {
-          this.$store.commit("setServiceSelected", new_val);
-          this.$router.push({
-            name: 'service-card',
-            params: {
-              service_name: this.$store.state.autocomplete_selected
-            }}).catch(
-                e => console.log(e)
-          )
-        } else {
-          this.$store.commit("setStopSelected", new_val);
-          this.$router.push({
-            name: 'bus-list',
-            params: {
-              bus_stop_name: this.$store.state.autocomplete_selected,
-            }}).catch(
-                    e => console.log(e)
-          )
-        }
-      }
+      // "$store.state.autocomplete_selected": function (new_val) {
+      //   if (new_val === '') return;
+      //   if (this.$store.state.services.find(x => x.service_name === new_val)) {
+      //     this.$store.commit("setServiceSelected", new_val);
+      //     // this.$router.push({
+      //     //   name: 'service-card',
+      //     //   params: {
+      //     //     service_name: this.$store.state.autocomplete_selected
+      //     //   }}).catch(
+      //     //       e => console.log(e)
+      //     // )
+      //   } else {
+      //     this.$store.commit("setStopSelected", new_val);
+      //     // this.$router.push({
+      //     //   name: 'bus-list',
+      //     //   params: {
+      //     //     bus_stop_name: this.$store.state.autocomplete_selected,
+      //     //   }}).catch(
+      //     //           e => console.log(e)
+      //     // )
+      //   }
+      // }
     },
     computed: {
       autocomplete_items: function () {
@@ -269,7 +298,8 @@
       active_tab: {
         get: function () {
           if (this.$route.path.startsWith("/stops")) return 0;
-          return 1;
+          else if (this.$route.path.startsWith("/services")) return 1;
+          return 0;
         },
         set: function () {
 

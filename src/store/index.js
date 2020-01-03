@@ -11,7 +11,7 @@ export default new Vuex.Store({
         active_tab: 0,
         autocomplete_selected: "",
         stop_selected: "UTown",
-        service_selected: "D2"
+        service_selected: "A1"
     },
     mutations: {
         getStops(state, data) {

@@ -9,7 +9,7 @@
             <v-tab
                     v-for="service in $store.state.services"
                     :key="service.service_name"
-                    @click="$store.commit('setAutocompleteSelected', service.service_name)"
+                    @click="selectTab(service.service_name)"
             >
                 {{service.service_name}}
             </v-tab>
@@ -24,6 +24,14 @@
         data() {
             return {
                 active_tab: 0
+            }
+        },
+        methods: {
+            selectTab(name) {
+                this.$router.push({
+                    name: 'service-card',
+                    params: {service_name: name}})
+                    .catch(e => console.log(e))
             }
         },
         created() {

@@ -46,10 +46,11 @@ const routes = [
     path: '/about',
     component: About
   }
-]
+];
 
 const router = new VueRouter({
-  routes
-})
+  routes: routes,
+  mode: 'history'
+});
 
 export default router

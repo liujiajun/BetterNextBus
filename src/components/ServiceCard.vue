@@ -6,9 +6,6 @@
                         v-for="(pickupPoint, i) in service.pickup_points"
                         :key="i"
                 >
-<!--                    <v-list-item-icon>-->
-<!--                        <v-icon>mdi-bus-stop</v-icon>-->
-<!--                    </v-list-item-icon>-->
                     <v-list-item-avatar
                             color="indigo"
                             class="font-weight-light white--text"
@@ -21,6 +18,11 @@
                             {{getStop(pickupPoint.name).long_name}}
                         </v-list-item-title>
                     </v-list-item-content>
+                    <v-list-item-action>
+                        <v-btn icon>
+                            <v-icon>mdi-open-in-new</v-icon>
+                        </v-btn>
+                    </v-list-item-action>
                 </v-list-item>
             </v-list>
 

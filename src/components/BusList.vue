@@ -1,6 +1,6 @@
 <template>
   <div id="bus-list">
-    <v-container fluid>
+    <v-container fill-height>
       <v-row dense>
         <v-col v-for="(service, i) in service_timings"
                :key="i"
@@ -58,7 +58,6 @@
 </template>
 
 <script>
-  // import axios from "axios"
   import {RepositoryFactory} from "@/repository/reposiotry-factory";
   import RouteMap from "@/components/RouteMap";
   require('promise.prototype.finally').shim();

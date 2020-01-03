@@ -27,7 +27,17 @@ const routes = [
       },
       {
         path: 'services',
-        component: ServiceList
+        name: 'service-list',
+        component: ServiceList,
+        props: true,
+        children: [
+          {
+            path: ':service_name',
+            name: 'service-list',
+            component: ServiceList,
+            props: true
+          }
+        ]
       }
     ]
   },

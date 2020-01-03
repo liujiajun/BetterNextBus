@@ -11,27 +11,32 @@
             v-model="active_tab"
             fixed-tabs
             background-color="transparent">
-              <v-tab 
-              :to="{ name: 'bus-list', params: {
-                bus_stop_name: selected_bus_stop_name,
-                routes: routes
-              } }"
+<!--              :to="{ name: 'bus-list', params: {-->
+<!--              bus_stop_name: selected_bus_stop_name,-->
+<!--              routes: routes-->
+<!--              } }"-->
+
+<!--              :to="{ name: 'service-list', params: {-->
+<!--              service_name: selected_service_name,-->
+<!--              routes: routes-->
+<!--              } }"-->
+
+              <v-tab
+              @click="autocomplete_selected=selected_bus_stop_name"
               >
                 <v-icon>mdi-bus-stop</v-icon>
               </v-tab>
-              <v-tab to="/services">
+              <v-tab
+              @click="autocomplete_selected=selected_service_name"
+              >
                 <v-icon>mdi-map-search-outline</v-icon>
               </v-tab>
             </v-tabs>
           </template>
           <v-toolbar-title class="title mr-6 hidden-sm-and-down">BetterNextBus</v-toolbar-title>
           <v-autocomplete
-                  :items="bus_stops"
-                  v-model="selected_bus_stop_name"
-                  v-on:input="$router.push({ name: 'bus-list', params: {
-                    bus_stop_name: selected_bus_stop_name,
-                    routes: routes
-                  }})"
+                  :items="autocomplete_items"
+                  v-model="autocomplete_selected"
                   prepend-icon="mdi-magnify"
                   label="Which bus stop are you at?"
                   flat
@@ -60,26 +65,34 @@
                       color="blue-grey"
                       class="white--text"
                       close
-                      @click:close="selected_bus_stop_name=''"
+                      @click:close="autocomplete_selected=''"
               >
                 <v-icon left>mdi-bus-stop</v-icon>
-                <span v-text="item.short_name"></span>
+                <span v-text="item.type === 'stop' ? item.sub_title : item.title"></span>
               </v-chip>
             </template>
 
             <template v-slot:item="{ item }">
               <v-list-item-avatar
+                      v-if="item.type==='stop'"
                       color="indigo"
                       class="headline font-weight-light white--text"
               >
                 {{ item.name.charAt(0) }}
               </v-list-item-avatar>
+              <v-list-item-avatar
+                      v-if="item.type==='service'"
+                      color="orange"
+                      class="font-weight-light white--text"
+              >
+                {{ item.name.length > 4 ? item.name.charAt(0) : item.name }}
+              </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title v-text="item.long_name"></v-list-item-title>
-                <v-list-item-subtitle v-text="item.short_name"></v-list-item-subtitle>
+                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <v-list-item-subtitle v-text="item.sub_title"></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <v-icon>mdi-bus-stop</v-icon>
+                <v-icon>{{item.type === 'stop' ? 'mdi-bus-stop' : 'mdi-bus'}}</v-icon>
               </v-list-item-action>
             </template>
           </v-autocomplete>
@@ -108,24 +121,19 @@
           </v-btn>
         </v-snackbar>
       </div>
-      <router-view></router-view>
+      <keep-alive>
+        <router-view @onLoadingStateChange="setLoadingState"></router-view>
+      </keep-alive>
     </v-app>
   </div>
 </template>
 
 <script>
   import {RepositoryFactory} from "@/repository/reposiotry-factory";
-  // import BusList from "@/components/BusList";
-  // import ServiceList from "@/components/ServiceList";
 
   export default {
     name: 'App',
-    components: {
-      // BusList,
-      // ServiceList,
-    },
     mounted() {
-      this.selected_bus_stop_name = this.$route.params.bus_stop_name
     },
     async created() {
       this.loading = true;
@@ -137,6 +145,12 @@
         this.snackbar = true;
       } finally {
         this.loading = false
+      }
+
+      if (this.$route.params.bus_stop_name !== undefined) {
+        this.autocomplete_selected = this.$route.params.bus_stop_name
+      } else if (this.$route.params.service_name !== undefined) {
+        this.autocomplete_selected = this.$route.params.service_name
       }
 
       try {
@@ -240,25 +254,79 @@
             }
           });
           this.setLoadingState(false)
-          this.selected_bus_stop_name = this.bus_stops[0].name
+          this.autocomplete_selected = this.bus_stops[0].name
         })
-      }
+      },
     },
     data() {
       return {
         bus_stops: [],
         routes: [],
+        autocomplete_selected: "",
         selected_bus_stop_name: "",
+        selected_service_name: "D1",
         loading: false,
         location: null,
         snackbar: false,
         snackbar_message: "",
-        active_tab: "/stops",
+        active_tab: "",
       }
     },
     watch: {
       "stop_name": function (new_val) {
         this.selected_bus_stop_name = new_val
+      },
+      "autocomplete_selected": function (new_val) {
+        if (new_val === '') return;
+        if (this.routes.find(x => x.service_name === new_val)) {
+          this.active_tab = 1;
+          this.selected_service_name = new_val;
+          this.$router.push({
+            name: 'service-list',
+            params: {
+              service_name: this.autocomplete_selected,
+              routes: this.routes
+            }}).catch(
+                e => console.log(e)
+          )
+        } else {
+          this.active_tab = 0;
+          this.selected_bus_stop_name = new_val;
+            this.$router.push({
+            name: 'bus-list',
+            params: {
+              bus_stop_name: this.autocomplete_selected,
+              routes: this.routes
+            }}).catch(
+                    e => console.log(e)
+          )
+        }
+      }
+    },
+    computed: {
+      autocomplete_items: function () {
+        let res = [];
+        for (const stop of this.bus_stops) {
+          res.push({
+            type: 'stop',
+            search_field: stop.search_field,
+            name: stop.name,
+            title: stop.long_name,
+            sub_title: stop.short_name
+          })
+        }
+
+        for (const route of this.routes) {
+          res.push({
+            type: 'service',
+            search_field: route.service_name + route.description,
+            name: route.service_name,
+            title: route.service_name,
+            sub_title: route.description
+          })
+        }
+
+        return res
       }
     }
   };

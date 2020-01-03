@@ -208,18 +208,20 @@
         location: null,
         snackbar: false,
         snackbar_message: "",
-        active_tab: "",
       }
     },
     watch: {
-      "stop_name": function (new_val) {
-        this.selected_bus_stop_name = new_val
+      "$route.path": function () {
+        if (this.$route.path.startsWith("/stops")) {
+          this.$store.commit('setAutocompleteSelected', this.$store.state.stop_selected)
+        } else if (this.$route.path.startsWith("/services")) {
+          this.$store.commit('setAutocompleteSelected', this.$store.state.service_selected)
+        }
       },
       "$store.state.autocomplete_selected": function (new_val) {
         if (new_val === '') return;
         if (this.$store.state.services.find(x => x.service_name === new_val)) {
-          this.active_tab = 1;
-          this.$store.commit("setServiceSelected", new_val)
+          this.$store.commit("setServiceSelected", new_val);
           this.$router.push({
             name: 'service-card',
             params: {
@@ -228,8 +230,7 @@
                 e => console.log(e)
           )
         } else {
-          this.active_tab = 0;
-          this.$store.commit("setStopSelected", new_val)
+          this.$store.commit("setStopSelected", new_val);
           this.$router.push({
             name: 'bus-list',
             params: {
@@ -264,6 +265,15 @@
         }
 
         return res
+      },
+      active_tab: {
+        get: function () {
+          if (this.$route.path.startsWith("/stops")) return 0;
+          return 1;
+        },
+        set: function () {
+
+        }
       }
     }
   };

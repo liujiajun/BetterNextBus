@@ -2,7 +2,6 @@
     <v-container>
         <v-tabs
                 v-model="active_tab"
-                fixed-tabs
                 background-color="transparent"
                 show-arrows
         >

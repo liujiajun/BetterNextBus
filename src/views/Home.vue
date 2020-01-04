@@ -37,7 +37,7 @@
                   v-model="$store.state.autocomplete_selected"
                   v-on:input="selectFromAutocomplete"
                   prepend-icon="mdi-magnify"
-                  label="Which bus stop are you at?"
+                  label="Enter bus stop or service"
                   flat
                   hide-details
                   hide-selected
@@ -52,7 +52,7 @@
             <template v-slot:no-data>
               <v-list-item>
                 <v-list-item-title>
-                  Search for a <strong>Bus Stop</strong>
+                  Search for a <strong>Bus stop</strong> or <strong>Bus service</strong>
                 </v-list-item-title>
               </v-list-item>
             </template>

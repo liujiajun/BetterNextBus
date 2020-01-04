@@ -8,6 +8,7 @@
                 >
                     <v-card
                             color="teal"
+                            outlined
                             dark>
                         <v-list-item two-line>
                             <v-list-item-avatar color="white" size="48">
@@ -42,6 +43,12 @@
                             </div>
                         </v-expand-transition>
                         <v-card-actions>
+                            <v-btn
+                                    icon
+                                    @click="gotoService(service_timings[i].service_name)"
+                            >
+                                <v-icon>mdi-map-search-outline</v-icon>
+                            </v-btn>
                             <v-spacer></v-spacer>
                             <v-btn
                                     text
@@ -112,7 +119,17 @@
 
             },
             showMap(cardIndex) {
-                this.service_timings[cardIndex].show_map = !this.service_timings[cardIndex].show_map
+                for(let i=0; i<this.service_timings.length; i++) {
+                    if (cardIndex === i) this.service_timings[cardIndex].show_map = !this.service_timings[cardIndex].show_map;
+                    else
+                        this.service_timings[i].show_map = false;
+                }
+            },
+            gotoService(name) {
+                this.$router.push({
+                    name: 'service-card',
+                    params: {service_name: name}})
+                    .catch(e => console.log(e))
             }
         },
         watch: {

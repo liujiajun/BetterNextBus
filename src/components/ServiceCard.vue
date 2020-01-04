@@ -19,8 +19,12 @@
                         </v-list-item-title>
                     </v-list-item-content>
                     <v-list-item-action>
-                        <v-btn icon>
-                            <v-icon>mdi-open-in-new</v-icon>
+                        <v-btn
+                                icon
+                                color="teal"
+                                @click="gotoStop(pickupPoint.name)"
+                        >
+                            <v-icon>mdi-bus-stop</v-icon>
                         </v-btn>
                     </v-list-item-action>
                 </v-list-item>
@@ -40,6 +44,12 @@
                     return name
                 }
                 return this.$store.state.stops.find(x => x.name === name)
+            },
+            gotoStop(name) {
+                this.$router.push({
+                    name: 'bus-list',
+                    params: {bus_stop_name: name}})
+                    .catch(e => console.log(e))
             }
         },
         computed: {

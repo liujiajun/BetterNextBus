@@ -17,11 +17,11 @@
                             <v-list-item-content>
                                 <v-container class="pa-0">
                                     <v-row justify="space-between">
-                                        <v-col cols="7">
+                                        <v-col cols="6">
                                             <v-list-item-title class="headline">{{service.service_name}}
                                             </v-list-item-title>
                                         </v-col>
-                                        <v-col cols="5">
+                                        <v-col cols="6">
                                             <v-list-item-title class="headline text-right">
                                                 <span class="headline">{{service.arrival_time}}</span>
                                                 <span v-if="service.arrival_time=='1'"> min</span>

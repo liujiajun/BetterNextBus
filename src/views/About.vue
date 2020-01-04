@@ -12,9 +12,33 @@
                     height="250"
                     src="../assets/logo.png"
             ></v-img>
-            <v-card-title class="headline justify-center teal--text">NUSBuses</v-card-title>
+            <v-card-title class="headline font-weight-bold justify-center teal--text">NUSBuses</v-card-title>
             <v-card-subtitle class="text-center">Delightful shuttle bus tracker for the NUS community</v-card-subtitle>
-<!--            <v-card-title class="body-1">NUSBuses </v-card-title>-->
+            <div class="feedback">
+              <v-card-title class="subtitle justify-center teal--text">Give Us Feedback</v-card-title>
+              <v-card-text class="text-center">NUSBuses is in testing phase. We value your feedback including bug report, feature request.
+                You can contact us through Github issues or email.
+              </v-card-text>
+              <v-row justify="center">
+                <v-btn text large fab>
+                  <v-icon large>mdi-github-circle</v-icon>
+                </v-btn>
+                <v-btn text large fab>
+                  <v-icon large>mdi-email</v-icon>
+                </v-btn>
+              </v-row>
+            </div>
+            <div class="contribute">
+              <v-card-title class="subtitle justify-center teal--text">Contribute</v-card-title>
+              <v-card-text class="text-center">NUSBuses is a student-initiated, open-source project.
+                Contribute to NUSBuses now on GitHub!
+              </v-card-text>
+              <v-row justify="center">
+                <v-btn text large fab color="black">
+                  <v-icon large>mdi-github-circle</v-icon>
+                </v-btn>
+              </v-row>
+            </div>
           </v-card>
         </v-col>
       </v-row>

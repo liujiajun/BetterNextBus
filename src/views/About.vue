@@ -8,7 +8,13 @@
                   color="transparent"
                   class="mx-auto"
           >
-            <v-card-title class="headline">NUSBuses</v-card-title>
+            <v-img
+                    height="250"
+                    src="../assets/logo.png"
+            ></v-img>
+            <v-card-title class="headline justify-center teal--text">NUSBuses</v-card-title>
+            <v-card-subtitle class="text-center">Delightful shuttle bus tracker for the NUS community</v-card-subtitle>
+<!--            <v-card-title class="body-1">NUSBuses </v-card-title>-->
           </v-card>
         </v-col>
       </v-row>

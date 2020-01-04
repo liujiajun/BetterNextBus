@@ -8,16 +8,24 @@
         >
           <template v-slot:extension>
             <v-tabs
-                    v-model="tabs"
-                    fixed-tabs
-                    background-color="transparent"
+            v-model="active_tab"
+            fixed-tabs
+            background-color="transparent">
 
-            >
-              <v-tabs-slider></v-tabs-slider>
-              <v-tab>
+              <v-tab
+              @click="
+              $router.push({
+                name: 'bus-list',
+                params: {bus_stop_name: $store.state.stop_selected}})
+                .catch(e => console.log(e))"
+              >
                 <v-icon>mdi-bus-stop</v-icon>
               </v-tab>
               <v-tab
+              @click="$router.push({
+                name: 'service-card',
+                params: {service_name: $store.state.service_selected}})
+                .catch(e => console.log(e))"
               >
                 <v-icon>mdi-map-search-outline</v-icon>
               </v-tab>
@@ -25,11 +33,11 @@
           </template>
           <v-toolbar-title class="title mr-6 hidden-sm-and-down">BetterNextBus</v-toolbar-title>
           <v-autocomplete
-                  :items="bus_stops"
-                  v-model="selected_bus_stop_name"
-                  v-on:input="$router.push('/stops/' + selected_bus_stop_name)"
+                  :items="autocomplete_items"
+                  v-model="$store.state.autocomplete_selected"
+                  v-on:input="selectFromAutocomplete"
                   prepend-icon="mdi-magnify"
-                  label="Which bus stop are you at?"
+                  label="Enter bus stop or service"
                   flat
                   hide-details
                   hide-selected
@@ -44,7 +52,7 @@
             <template v-slot:no-data>
               <v-list-item>
                 <v-list-item-title>
-                  Search for a <strong>Bus Stop</strong>
+                  Search for a <strong>Bus stop</strong> or <strong>Bus service</strong>
                 </v-list-item-title>
               </v-list-item>
             </template>
@@ -56,26 +64,34 @@
                       color="blue-grey"
                       class="white--text"
                       close
-                      @click:close="selected_bus_stop_name=''"
+                      @click:close="$store.commit('setAutocompleteSelected', '')"
               >
                 <v-icon left>mdi-bus-stop</v-icon>
-                <span v-text="item.short_name"></span>
+                <span v-text="item.type === 'stop' ? item.sub_title : item.title"></span>
               </v-chip>
             </template>
 
             <template v-slot:item="{ item }">
               <v-list-item-avatar
+                      v-if="item.type==='stop'"
                       color="indigo"
                       class="headline font-weight-light white--text"
               >
                 {{ item.name.charAt(0) }}
               </v-list-item-avatar>
+              <v-list-item-avatar
+                      v-if="item.type==='service'"
+                      color="orange"
+                      class="font-weight-light white--text"
+              >
+                {{ item.name.length > 4 ? item.name.charAt(0) : item.name }}
+              </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title v-text="item.long_name"></v-list-item-title>
-                <v-list-item-subtitle v-text="item.short_name"></v-list-item-subtitle>
+                <v-list-item-title v-text="item.title"></v-list-item-title>
+                <v-list-item-subtitle v-text="item.sub_title"></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <v-icon>mdi-bus-stop</v-icon>
+                <v-icon>{{item.type === 'stop' ? 'mdi-bus-stop' : 'mdi-bus'}}</v-icon>
               </v-list-item-action>
             </template>
           </v-autocomplete>
@@ -104,68 +120,48 @@
           </v-btn>
         </v-snackbar>
       </div>
-<!--      <bus-list-->
-<!--              :bus_stop_name="selected_bus_stop_name"-->
-<!--              :routes="routes"-->
-<!--              @onLoadingStateChange="setLoadingState"-->
-<!--      />-->
-<!--      <service-list>-->
-
-<!--      </service-list>-->
-      <v-tabs-items
-              v-model="tabs">
-        <v-tab-item >
-          <bus-list
-                  :bus_stop_name="selected_bus_stop_name"
-                  :routes="routes"
-                  @onLoadingStateChange="setLoadingState"
-          />
-        </v-tab-item>
-        <v-tab-item>
-          <service-list>
-
-          </service-list>
-        </v-tab-item>
-      </v-tabs-items>
+      <keep-alive>
+        <router-view @onLoadingStateChange="setLoadingState"></router-view>
+      </keep-alive>
     </v-app>
   </div>
 </template>
 
 <script>
-  import {RepositoryFactory} from "@/repository/reposiotry-factory";
-  import BusList from "@/components/BusList";
-  import ServiceList from "@/components/ServiceList";
+  // import {RepositoryFactory} from "@/repository/reposiotry-factory";
 
   export default {
     name: 'App',
-    components: {
-      BusList,
-      ServiceList,
-    },
     mounted() {
-      this.selected_bus_stop_name = this.$route.params.stop_name
     },
     async created() {
       this.loading = true;
       try {
-        this.bus_stops = await RepositoryFactory.get("busStops").get();
-        this.routes = await RepositoryFactory.get("serviceDescriptions").get();
+        await this.$store.dispatch("getStops");
+        await this.$store.dispatch('getServices');
       } catch (e) {
         this.snackbar_message = "Timed out. Check Internet connection.";
         this.snackbar = true;
       } finally {
         this.loading = false
       }
+      if (this.$route.params.bus_stop_name !== undefined) {
+        this.$store.commit('setAutocompleteSelected', this.$route.params.bus_stop_name);
+      } else if (this.$route.params.service_name !== undefined) {
+        this.$store.commit('setAutocompleteSelected', this.$route.params.service_name);
+      }
 
       try {
-        for (const route of this.routes) {
-          route.check_points = await RepositoryFactory.get("checkPoints").get(route.service_name);
-          route.pickup_points = await RepositoryFactory.get("pickupPoints").get(route.service_name);
+        for (const service of this.$store.state.services) {
+          this.$store.dispatch("getPickupPoints", service.service_name);
+          this.$store.dispatch("getCheckPoints", service.service_name);
         }
+        console.log("Finished loading checkpoints and pick-up points.")
       } catch (e) {
         this.snackbar_message = "Timed out. Check Internet connection.";
         this.snackbar = true;
       }
+
 
     },
     methods: {
@@ -208,75 +204,106 @@
       updateBusStopsByDistance: function () {
         this.setLoadingState(true);
         this.locate().then(() => {
-          this.bus_stops.sort((stop1, stop2) => {
-            function getDistance(lat1, lon1, lat2, lon2, unit) {
-              if ((lat1 == lat2) && (lon1 == lon2)) {
-                return 0;
-              } else {
-                var radlat1 = Math.PI * lat1 / 180;
-                var radlat2 = Math.PI * lat2 / 180;
-                var theta = lon1 - lon2;
-                var radtheta = Math.PI * theta / 180;
-                var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-                if (dist > 1) {
-                  dist = 1;
-                }
-                dist = Math.acos(dist);
-                dist = dist * 180 / Math.PI;
-                dist = dist * 60 * 1.1515;
-                if (unit == "K") {
-                  dist = dist * 1.609344
-                }
-                if (unit == "N") {
-                  dist = dist * 0.8684
-                }
-                return dist;
-              }
-            }
-
-            var distance1 = getDistance(
-                    Number(stop1.latitude),
-                    Number(stop1.longitude),
-                    this.location.latitude,
-                    this.location.longitude,
-                    "M"
-            );
-            var distance2 = getDistance(
-                    Number(stop2.latitude),
-                    Number(stop2.longitude),
-                    this.location.latitude,
-                    this.location.longitude,
-                    "M"
-            );
-
-            if (distance1 > distance2) {
-              return 1
-            } else if (distance1 < distance2) {
-              return -1
-            } else {
-              return 0
-            }
-          });
-          this.setLoadingState(false)
-          this.selected_bus_stop_name = this.bus_stops[0].name
+          this.$store.commit("sortStops", this.location);
+          this.setLoadingState(false);
+          // this.$store.commit('setAutocompleteSelected', this.$store.state.stops[0].name)
+          this.$router.push({
+            name: 'bus-list',
+            params: {bus_stop_name: this.$store.state.stops[0].name}})
+                  .catch(e => console.log(e))
         })
+      },
+      selectFromAutocomplete() {
+        let found = this.autocomplete_items
+                .find(x => x.name === this.$store.state.autocomplete_selected);
+        if (found.type === 'stop') {
+          this.$router.push({
+            name: 'bus-list',
+            params: {bus_stop_name: this.$store.state.autocomplete_selected}})
+                  .catch(e => console.log(e))
+        } else {
+          this.$router.push({
+            name: 'service-list',
+            params: {service_name: this.$store.state.autocomplete_selected}})
+                  .catch(e => console.log(e))
+        }
       }
     },
     data() {
       return {
-        bus_stops: [],
-        routes: [],
-        selected_bus_stop_name: "",
         loading: false,
         location: null,
         snackbar: false,
         snackbar_message: "",
-        tabs: null
       }
     },
     watch: {
-      "$route": function () {
-        this.selected_bus_stop_name = this.$route.params.stop_name
+      "$route.path": function () {
+        if (this.$route.path.startsWith("/stops")) {
+          this.$store.commit('setAutocompleteSelected', this.$route.params.bus_stop_name);
+          this.$store.commit("setStopSelected", this.$route.params.bus_stop_name);
+        } else if (this.$route.path.startsWith("/services")) {
+          this.$store.commit('setAutocompleteSelected', this.$route.params.service_name);
+          this.$store.commit("setServiceSelected", this.$route.params.service_name);
+        }
+      },
+      // "$store.state.autocomplete_selected": function (new_val) {
+      //   if (new_val === '') return;
+      //   if (this.$store.state.services.find(x => x.service_name === new_val)) {
+      //     this.$store.commit("setServiceSelected", new_val);
+      //     // this.$router.push({
+      //     //   name: 'service-card',
+      //     //   params: {
+      //     //     service_name: this.$store.state.autocomplete_selected
+      //     //   }}).catch(
+      //     //       e => console.log(e)
+      //     // )
+      //   } else {
+      //     this.$store.commit("setStopSelected", new_val);
+      //     // this.$router.push({
+      //     //   name: 'bus-list',
+      //     //   params: {
+      //     //     bus_stop_name: this.$store.state.autocomplete_selected,
+      //     //   }}).catch(
+      //     //           e => console.log(e)
+      //     // )
+      //   }
+      // }
+    },
+    computed: {
+      autocomplete_items: function () {
+        let res = [];
+        for (const stop of this.$store.state.stops) {
+          res.push({
+            type: 'stop',
+            search_field: stop.search_field,
+            name: stop.name,
+            title: stop.long_name,
+            sub_title: stop.short_name
+          })
+        }
+
+        for (const service of this.$store.state.services) {
+          res.push({
+            type: 'service',
+            search_field: service.service_name + service.description,
+            name: service.service_name,
+            title: service.service_name,
+            sub_title: service.description
+          })
+        }
+
+        return res
+      },
+      active_tab: {
+        get: function () {
+          if (this.$route.path.startsWith("/stops")) return 0;
+          else if (this.$route.path.startsWith("/services")) return 1;
+          return 0;
+        },
+        set: function () {
+
+        }
       }
     }
   };

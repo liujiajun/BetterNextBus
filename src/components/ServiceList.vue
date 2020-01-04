@@ -23,7 +23,7 @@
         name: "service-list",
         data() {
             return {
-                active_tab: 0
+                // active_tab: 0
             }
         },
         methods: {
@@ -34,15 +34,16 @@
                     .catch(e => console.log(e))
             }
         },
-        created() {
-            let index = this.$store.state.services.findIndex(x => x.service_name === this.$route.params.service_name);
-            if (index === undefined) this.active_tab = index;
-        },
-        watch: {
-            "$store.state.service_selected": function (newVal) {
-                let index = this.$store.state.services.findIndex(x => x.service_name === newVal);
-                if (index === undefined) return;
-                this.active_tab = index;
+        computed: {
+            active_tab: {
+                get: function() {
+                    let index = this.$store.state.services.findIndex(x => x.service_name === this.$route.params.service_name);
+                    if (index === undefined) return 0;
+                    return index
+                },
+                set: function () {
+
+                }
             }
         }
     }

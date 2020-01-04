@@ -223,7 +223,7 @@
                   .catch(e => console.log(e))
         } else {
           this.$router.push({
-            name: 'service-list',
+            name: 'service-card',
             params: {service_name: this.$store.state.autocomplete_selected}})
                   .catch(e => console.log(e))
         }

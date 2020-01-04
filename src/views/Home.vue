@@ -189,7 +189,6 @@
       },
       async locate() {
         try {
-          // this.$store.state.current_location =
           let location = await this.getLocation();
           this.$store.commit("setCurrentLocation", location)
         } catch (e) {

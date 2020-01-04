@@ -35,7 +35,7 @@
                     cols="12"
             >
               Made with 💗 by
-              <a href="https://www.github.com/liujiajun/BetterNextBus" target="_blank" style="color: teal">
+              <a :href="github_url" target="_blank" style="color: teal">
               <strong>@BetterNextBus</strong>
               </a>
               <br> Copyright © 2019 - {{new Date().getFullYear()}}
@@ -47,8 +47,13 @@
 </template>
 
 <script>
+  import {GITHUB_URL} from '@/utils/config'
   export default {
-
+    data() {
+      return {
+        github_url: GITHUB_URL
+      }
+    }
   }
 </script>
 <style>

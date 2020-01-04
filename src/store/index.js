@@ -11,7 +11,8 @@ export default new Vuex.Store({
         active_tab: 0,
         autocomplete_selected: "",
         stop_selected: "UTown",
-        service_selected: "A1"
+        service_selected: "A1",
+        current_location: null
     },
     mutations: {
         getStops(state, data) {
@@ -93,8 +94,10 @@ export default new Vuex.Store({
         },
         setActiveTab(state, index) {
             state.active_tab = index;
+        },
+        setCurrentLocation(state, location) {
+            state.current_location = location;
         }
-
     },
     actions: {
         async getStops({commit}) {

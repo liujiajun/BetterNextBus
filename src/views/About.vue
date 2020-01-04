@@ -9,6 +9,7 @@
                   class="mx-auto"
           >
             <v-img
+                    contain="true"
                     height="250"
                     src="../assets/logo.svg"
             >
@@ -28,7 +29,7 @@
                   <v-icon large>mdi-github-circle</v-icon>
                 </v-btn>
                 <v-btn text large fab
-                       @click="window.open('mailto:' + email_decoded)"
+                       :href="'mailto:' + email_decoded"
                 >
                   <v-icon large>mdi-email</v-icon>
                 </v-btn>

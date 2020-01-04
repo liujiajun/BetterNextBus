@@ -95,7 +95,10 @@
               </v-list-item-action>
             </template>
           </v-autocomplete>
-          <v-btn icon @click="updateBusStopsByDistance">
+          <v-btn icon
+                 :loading="locating"
+                 :disabled="locating"
+                 @click="updateBusStopsByDistance">
             <v-icon>mdi-crosshairs-gps</v-icon>
           </v-btn>
           <v-progress-linear
@@ -128,8 +131,6 @@
 </template>
 
 <script>
-  // import {RepositoryFactory} from "@/repository/reposiotry-factory";
-
   export default {
     name: 'App',
     mounted() {
@@ -188,7 +189,9 @@
       },
       async locate() {
         try {
-          this.location = await this.getLocation();
+          // this.$store.state.current_location =
+          let location = await this.getLocation();
+          this.$store.commit("setCurrentLocation", location)
         } catch (e) {
           if (e.code === e.PERMISSION_DENIED) {
             this.snackbar_message = "Permission denied. Try enabling location service."
@@ -197,16 +200,15 @@
           } else {
             this.snackbar_message = "Unknown error when getting geolocation."
           }
-          this.snackbar = true
-          this.loading = false
+          this.snackbar = true;
+          this.locating = false;
         }
       },
       updateBusStopsByDistance: function () {
-        this.setLoadingState(true);
+        this.locating = true;
         this.locate().then(() => {
-          this.$store.commit("sortStops", this.location);
-          this.setLoadingState(false);
-          // this.$store.commit('setAutocompleteSelected', this.$store.state.stops[0].name)
+          this.$store.commit("sortStops", this.$store.state.current_location);
+          this.locating = false;
           this.$router.push({
             name: 'bus-list',
             params: {bus_stop_name: this.$store.state.stops[0].name}})
@@ -232,6 +234,7 @@
     data() {
       return {
         loading: false,
+        locating: false,
         location: null,
         snackbar: false,
         snackbar_message: "",

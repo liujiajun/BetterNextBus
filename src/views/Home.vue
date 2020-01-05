@@ -123,6 +123,18 @@
           </v-btn>
         </v-snackbar>
       </div>
+
+      <v-container
+              class="pb-0">
+        <v-alert
+                color="teal darken-3"
+                text
+                dismissible="true"
+        >
+          <div class="body-2 font-weight-bold">Official Announcements from NextBus</div>
+          <div class="body-2">{{$store.state.announcements[0].text}}</div>
+        </v-alert>
+      </v-container>
       <keep-alive>
         <router-view @onLoadingStateChange="setLoadingState"></router-view>
       </keep-alive>
@@ -153,6 +165,7 @@
       }
 
       try {
+        await this.$store.dispatch("getAnnouncements");
         for (const service of this.$store.state.services) {
           await this.$store.dispatch("getPickupPoints", service.service_name);
           await this.$store.dispatch("getCheckPoints", service.service_name);

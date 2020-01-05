@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        announcements: [],
         stops: [],
         services: [],
         active_tab: 0,
@@ -15,6 +16,9 @@ export default new Vuex.Store({
         current_location: null
     },
     mutations: {
+        getAnnouncements(state, data) {
+            state.announcements = data
+        },
         getStops(state, data) {
             state.stops = data
         },
@@ -100,6 +104,10 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        async getAnnouncements({commit}) {
+            await RepositoryFactory.get('announcements').get()
+                .then(res => commit('getAnnouncements', res))
+        },
         async getStops({commit}) {
             await RepositoryFactory.get('busStops').get()
                 .then(res => commit('getStops', res))

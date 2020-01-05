@@ -1,7 +1,7 @@
 <template>
     <div id="bus-list">
-        <v-container>
-            <v-row>
+        <v-container class="pt-0">
+            <v-row class="pt-0">
                 <v-col v-for="(service, i) in service_timings"
                        :key="i"
                        :cols="12"

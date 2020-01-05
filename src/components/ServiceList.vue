@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="pt-0">
         <v-tabs
                 v-model="active_tab"
                 background-color="transparent"

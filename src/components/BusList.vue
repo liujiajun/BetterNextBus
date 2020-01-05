@@ -1,7 +1,7 @@
 <template>
     <div id="bus-list">
-        <v-container fill-height>
-            <v-row dense>
+        <v-container>
+            <v-row>
                 <v-col v-for="(service, i) in service_timings"
                        :key="i"
                        :cols="12"
@@ -120,9 +120,13 @@
             },
             showMap(cardIndex) {
                 for(let i=0; i<this.service_timings.length; i++) {
-                    if (cardIndex === i) this.service_timings[cardIndex].show_map = !this.service_timings[cardIndex].show_map;
-                    else
+                    if (cardIndex === i) {
+                        this.service_timings[cardIndex].show_map = !this.service_timings[cardIndex].show_map;
+                    }
+                    else {
                         this.service_timings[i].show_map = false;
+
+                    }
                 }
             },
             gotoService(name) {

@@ -21,11 +21,6 @@
 <script>
     export default {
         name: "service-list",
-        data() {
-            return {
-                // active_tab: 0
-            }
-        },
         methods: {
             selectTab(name) {
                 this.$router.push({

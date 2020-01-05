@@ -154,8 +154,8 @@
 
       try {
         for (const service of this.$store.state.services) {
-          this.$store.dispatch("getPickupPoints", service.service_name);
-          this.$store.dispatch("getCheckPoints", service.service_name);
+          await this.$store.dispatch("getPickupPoints", service.service_name);
+          await this.$store.dispatch("getCheckPoints", service.service_name);
         }
         console.log("Finished loading checkpoints and pick-up points.")
       } catch (e) {
@@ -248,29 +248,7 @@
           this.$store.commit('setAutocompleteSelected', this.$route.params.service_name);
           this.$store.commit("setServiceSelected", this.$route.params.service_name);
         }
-      },
-      // "$store.state.autocomplete_selected": function (new_val) {
-      //   if (new_val === '') return;
-      //   if (this.$store.state.services.find(x => x.service_name === new_val)) {
-      //     this.$store.commit("setServiceSelected", new_val);
-      //     // this.$router.push({
-      //     //   name: 'service-card',
-      //     //   params: {
-      //     //     service_name: this.$store.state.autocomplete_selected
-      //     //   }}).catch(
-      //     //       e => console.log(e)
-      //     // )
-      //   } else {
-      //     this.$store.commit("setStopSelected", new_val);
-      //     // this.$router.push({
-      //     //   name: 'bus-list',
-      //     //   params: {
-      //     //     bus_stop_name: this.$store.state.autocomplete_selected,
-      //     //   }}).catch(
-      //     //           e => console.log(e)
-      //     // )
-      //   }
-      // }
+      }
     },
     computed: {
       autocomplete_items: function () {

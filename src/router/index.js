@@ -1,10 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import About from '../views/About.vue'
-import ServiceList from '@/components/ServiceList'
 import BusList from '@/components/BusList'
-import ServiceCard from "@/components/ServiceCard";
 
 Vue.use(VueRouter)
 
@@ -29,13 +26,13 @@ const routes = [
       {
         path: 'services',
         name: 'service-list',
-        component: ServiceList,
+        component: () => import('@/components/ServiceList'),
         props: true,
         children: [
           {
             path: ':service_name',
             name: 'service-card',
-            component: ServiceCard,
+            component: () => import('@/components/ServiceCard'),
             props: true
           }
         ]
@@ -44,7 +41,7 @@ const routes = [
   },
   {
     path: '/about',
-    component: About
+    component: () => import('../views/About.vue')
   }
 ];
 

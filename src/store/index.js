@@ -108,12 +108,24 @@ export default new Vuex.Store({
             await RepositoryFactory.get('serviceDescriptions').get()
                 .then(res => commit('getServices', res))
         },
-        getCheckPoints({commit}, service_name) {
-            RepositoryFactory.get('checkPoints').get(service_name)
+        async getCheckPoints({commit, state}, service_name) {
+            if (state.services
+                .find(x => x.service_name === service_name)
+                .check_points
+                .length > 0) {
+                return
+            }
+            await RepositoryFactory.get('checkPoints').get(service_name)
                 .then(res => commit('addCheckPoints', {service_name: service_name, checkPoints: res}))
         },
-        getPickupPoints({commit}, service_name) {
-            RepositoryFactory.get('pickupPoints').get(service_name)
+        async getPickupPoints({commit, state}, service_name) {
+            if (state.services
+                .find(x => x.service_name === service_name)
+                .pickup_points
+                .length > 0) {
+                return
+            }
+            await RepositoryFactory.get('pickupPoints').get(service_name)
                 .then(res => commit('addPickupPoints', {service_name: service_name, pickupPoints: res}))
         }
     },

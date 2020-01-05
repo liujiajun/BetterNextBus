@@ -64,6 +64,9 @@
             }
         },
         async mounted() {
+            await this.$store.dispatch("getPickupPoints", this.bus);
+            await this.$store.dispatch("getCheckPoints", this.bus);
+
             try {
                 this.google = await gmapsInit();
                 const element = document.getElementById(this.mapName).getElementsByClassName("route-map")[0]
@@ -72,7 +75,7 @@
                     center: new this.google.maps.LatLng(1.29199190036396,103.78027611345),
                     disableDefaultUI: true,
                     fullscreenControl: true
-                }
+                };
 
                 this.gmap = new this.google.maps.Map(element, options);
 

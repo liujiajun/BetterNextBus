@@ -39,10 +39,6 @@
         name: "service-card",
         methods: {
             getStop(name) {
-                if (this.$store.state.stops.find(x => x.name === name) === undefined) {
-                    console.log("Undefined " + name)
-                    return name
-                }
                 return this.$store.state.stops.find(x => x.name === name)
             },
             gotoStop(name) {
@@ -56,7 +52,12 @@
             service: function () {
                 return this.$store.state.services.find(x => x.service_name === this.$store.state.service_selected)
             }
-        }
+        },
+        // watch: {
+        //     "$store.state.service_selected": function (newVal) {
+        //         this.$store.dispatch("getPickupPoints", newVal);
+        //     }
+        // }
     }
 </script>
 

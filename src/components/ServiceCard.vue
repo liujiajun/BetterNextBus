@@ -40,7 +40,18 @@
                 >
                     <v-row class="pt-1">
                         <v-col>
-                            <div>{{getStop(pickupPoint.name).short_name}}</div>
+                            <div>
+                                {{getStop(pickupPoint.name).short_name}}
+                                <v-chip
+                                        v-if="getStop(pickupPoint.name).name===nearest_stop_name"
+                                        class="white--text ml-0"
+                                        color="green darken-2"
+                                        label
+                                        small
+                                >
+                                    Nearest
+                                </v-chip>
+                            </div>
                             <div class="caption">{{getStop(pickupPoint.name).long_name}}</div>
                         </v-col>
                         <v-col cols="3">
@@ -78,6 +89,15 @@
         computed: {
             service: function () {
                 return this.$store.state.services.find(x => x.service_name === this.$store.state.service_selected)
+            },
+            nearest_stop_name: function () {
+                if (this.$store.state.current_location === null) return "";
+                for (const stop of this.$store.state.stops) {
+                    for (const pk of this.service.pickup_points) {
+                        if (stop.name === pk.name) return stop.name
+                    }
+                }
+                return "";
             }
         }
     }

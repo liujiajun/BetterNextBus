@@ -41,7 +41,7 @@
                                 <route-map :bus="service_timings[i].service_name" :stop="bus_stop_name"></route-map>
                             </div>
                         </v-expand-transition>
-                        <v-card-actions class="teal lighten-1 text--primary">
+                        <v-card-actions class="teal darken-1 text--primary">
                             <v-btn
                                     icon
                                     @click="gotoService(service_timings[i].service_name)"

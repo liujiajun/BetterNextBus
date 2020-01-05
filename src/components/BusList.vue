@@ -8,7 +8,6 @@
                 >
                     <v-card
                             color="teal"
-                            outlined
                             dark>
                         <v-list-item two-line>
                             <v-list-item-avatar color="white" size="48">
@@ -42,15 +41,16 @@
                                 <route-map :bus="service_timings[i].service_name" :stop="bus_stop_name"></route-map>
                             </div>
                         </v-expand-transition>
-                        <v-card-actions>
+                        <v-card-actions class="teal lighten-1 text--primary">
                             <v-btn
                                     icon
                                     @click="gotoService(service_timings[i].service_name)"
                             >
-                                <v-icon>mdi-map-search-outline</v-icon>
+                                <v-icon color="white">mdi-map-search-outline</v-icon>
                             </v-btn>
                             <v-spacer></v-spacer>
                             <v-btn
+                                    color="white"
                                     text
                                     @click="showMap(i)"
                             >
@@ -147,6 +147,3 @@
     };
 </script>
 
-<style>
-
-</style>

@@ -1,0 +1,45 @@
+<template>
+    <v-container
+            v-if="alert"
+            class="pb-0">
+        <v-alert
+                v-model="alert"
+                color="teal darken-3"
+                text
+                dismissible
+        >
+            <v-row align="center">
+                <v-col class="grow">
+                    <div class="body-2 font-weight-bold">Official Announcements from NextBus</div>
+                    <div class="body-2">{{$store.state.announcements[0].text}}</div>
+                </v-col>
+            </v-row>
+        </v-alert>
+    </v-container>
+</template>
+
+<script>
+    export default {
+        name: "announcement-box",
+        data() {
+            return {
+                alert: false,
+            }
+        },
+        watch: {
+            "alert": function (newVal) {
+                if (newVal === false) {
+                    localStorage.setItem('closedAnnouncementId', this.$store.state.announcements[0].id);
+                }
+            }
+        },
+        async created() {
+            await this.$store.dispatch("getAnnouncements");
+            this.alert = localStorage.getItem("closedAnnouncementId") !== this.$store.state.announcements[0].id
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>

@@ -123,18 +123,7 @@
           </v-btn>
         </v-snackbar>
       </div>
-
-      <v-container
-              class="pb-0">
-        <v-alert
-                color="teal darken-3"
-                text
-                dismissible="true"
-        >
-          <div class="body-2 font-weight-bold">Official Announcements from NextBus</div>
-          <div class="body-2">{{$store.state.announcements[0].text}}</div>
-        </v-alert>
-      </v-container>
+      <announcement-box></announcement-box>
       <keep-alive>
         <router-view @onLoadingStateChange="setLoadingState"></router-view>
       </keep-alive>
@@ -143,8 +132,13 @@
 </template>
 
 <script>
+  import AnnouncementBox from "@/components/AnnouncementBox";
+
   export default {
     name: 'App',
+    components: {
+      AnnouncementBox
+    },
     mounted() {
     },
     async created() {
@@ -165,7 +159,6 @@
       }
 
       try {
-        await this.$store.dispatch("getAnnouncements");
         for (const service of this.$store.state.services) {
           await this.$store.dispatch("getPickupPoints", service.service_name);
           await this.$store.dispatch("getCheckPoints", service.service_name);
@@ -208,6 +201,7 @@
           if (e.code === e.PERMISSION_DENIED) {
             this.snackbar_message = "Permission denied. Try enabling location service."
           } else if (e.code === e.POSITION_UNAVAILABLE || e.code === e.TIMEOUT) {
+            console.log(e)
             this.snackbar_message = "Geolocation not available at the moment. Try again later."
           } else {
             this.snackbar_message = "Unknown error when getting geolocation."

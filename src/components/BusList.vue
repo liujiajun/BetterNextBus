@@ -1,14 +1,16 @@
 <template>
     <div id="bus-list">
-        <v-container class="pt-0">
-            <v-row class="pt-0">
+        <v-container class="pt-0 mt-0">
+            <v-row class="pt-0 mt-0">
                 <v-col v-for="(service, i) in service_timings"
                        :key="i"
                        :cols="12"
                 >
                     <v-card
                             color="teal"
-                            dark>
+                            dark
+                            class="pt-0 mt-0"
+                    >
                         <v-list-item two-line>
                             <v-list-item-avatar color="white" size="48">
                                 <v-icon color="teal">mdi-bus</v-icon>

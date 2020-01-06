@@ -1,6 +1,7 @@
 <template>
     <div id="bus-list">
-        <v-container class="pt-0 mt-0">
+        <v-container
+                class="pt-0 mt-0">
             <v-slide-y-transition
                     group
                     tag="v-row"

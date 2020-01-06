@@ -110,6 +110,7 @@ export default new Vuex.Store({
                 state.favorites = JSON.parse(localStorage.getItem("favorites"))
             }
 
+            if (name === "") return;
             let index = state.favorites.indexOf(name);
             if(index!==-1){
                 state.favorites.splice(index, 1);

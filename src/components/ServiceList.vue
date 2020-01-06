@@ -3,7 +3,6 @@
         <v-tabs
                 v-model="active_tab"
                 background-color="transparent"
-                show-arrows
         >
             <v-tabs-slider color="teal"></v-tabs-slider>
             <v-tab

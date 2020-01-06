@@ -81,9 +81,7 @@
             }
         },
         async mounted() {
-            this.timer = setInterval(() => {
-                this.updateServiceTiming()
-            }, 30000);
+            this.timer = setInterval(this.updateServiceTiming, 30000);
             this.service_timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.stop_name);
             this.loading = false;
         },

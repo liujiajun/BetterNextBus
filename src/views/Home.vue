@@ -16,24 +16,24 @@
               @click="
               $router.push({
                 name: 'bus-list',
-                params: {bus_stop_name: $store.state.stop_selected}})
-                .catch(e => console.log(e))"
+                params: {bus_stop_name: $store.state.stop_selected}})"
               >
                 <v-icon>mdi-bus-stop</v-icon>
               </v-tab>
               <v-tab
               @click="$router.push({
                 name: 'service-card',
-                params: {service_name: $store.state.service_selected}})
-                .catch(e => console.log(e))"
+                params: {service_name: $store.state.service_selected}})"
               >
                 <v-icon>mdi-map-search-outline</v-icon>
               </v-tab>
               <v-tab
-                      @click="$router.push({name: 'favorite-list'})"
-              >
-                <v-icon>mdi-heart</v-icon>
-              </v-tab>
+                            @click="$router.push({name: 'favorite-list'})"
+                    >
+                        <v-icon>
+                            mdi-heart-outline
+                        </v-icon>
+                    </v-tab>
             </v-tabs>
           </template>
           <v-toolbar-title class="title mr-6 hidden-sm-and-down">BetterNextBus</v-toolbar-title>
@@ -136,6 +136,12 @@
       <keep-alive>
         <router-view @onLoadingStateChange="setLoadingState"></router-view>
       </keep-alive>
+      <v-container
+              v-if="$route.path==='/'"
+              class="text-center pa-10"
+      >
+        <div class="grey--text">To start, select a bus stop or service.</div>
+      </v-container>
     </v-app>
   </div>
 </template>

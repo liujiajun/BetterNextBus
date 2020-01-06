@@ -36,6 +36,11 @@ const routes = [
             props: true
           }
         ]
+      },
+      {
+        path: 'favorites',
+        name: 'favorite-list',
+        component: () => import('@/components/FavoriteList')
       }
     ]
   },

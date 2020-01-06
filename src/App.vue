@@ -47,6 +47,7 @@
 </template>
 
 <script>
+  //    "material-design-icons-iconfont": "^5.0.1",
   import {GITHUB_URL} from '@/utils/config'
   export default {
     data() {

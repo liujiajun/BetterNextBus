@@ -1,34 +1,6 @@
 <template>
     <div id="service-card">
         <v-card class="transparent" flat>
-            <!--            <v-list class="transparent" dense>-->
-            <!--                <v-list-item-->
-            <!--                        v-for="(pickupPoint, i) in service.pickup_points"-->
-            <!--                        :key="i"-->
-            <!--                >-->
-            <!--                    <v-list-item-avatar-->
-            <!--                            color="indigo"-->
-            <!--                            class="font-weight-light white&#45;&#45;text"-->
-            <!--                            size="32"-->
-            <!--                    >-->
-            <!--                        {{ pickupPoint.name.charAt(0) }}-->
-            <!--                    </v-list-item-avatar>-->
-            <!--                    <v-list-item-content>-->
-            <!--                        <v-list-item-title>-->
-            <!--                            {{getStop(pickupPoint.name).long_name}}-->
-            <!--                        </v-list-item-title>-->
-            <!--                    </v-list-item-content>-->
-            <!--                    <v-list-item-action>-->
-            <!--                        <v-btn-->
-            <!--                                icon-->
-            <!--                                color="teal"-->
-            <!--                                @click="gotoStop(pickupPoint.name)"-->
-            <!--                        >-->
-            <!--                            <v-icon>mdi-bus-stop</v-icon>-->
-            <!--                        </v-btn>-->
-            <!--                    </v-list-item-action>-->
-            <!--                </v-list-item>-->
-            <!--            </v-list>-->
             <v-timeline
                     dense
             >
@@ -54,10 +26,12 @@
                             </div>
                             <div class="caption">{{getStop(pickupPoint.name).long_name}}</div>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="1" class="pr-2 mr-2">
+                            <favorite-button :name="pickupPoint.name"></favorite-button>
+                        </v-col>
+                        <v-col cols="2" class="pr-1 mr-3">
                             <v-btn
                                     icon
-                                    color="teal"
                                     @click="gotoStop(pickupPoint.name)"
                             >
                                 <v-icon>mdi-bus-stop</v-icon>
@@ -72,8 +46,10 @@
 </template>
 
 <script>
+    import FavoriteButton from "@/components/FavoriteButton";
     export default {
         name: "service-card",
+        components: {FavoriteButton},
         methods: {
             getStop(name) {
                 return this.$store.state.stops.find(x => x.name === name)

@@ -29,6 +29,11 @@
               >
                 <v-icon>mdi-map-search-outline</v-icon>
               </v-tab>
+              <v-tab
+                      @click="$router.push({name: 'favorite-list'})"
+              >
+                <v-icon>mdi-heart</v-icon>
+              </v-tab>
             </v-tabs>
           </template>
           <v-toolbar-title class="title mr-6 hidden-sm-and-down">BetterNextBus</v-toolbar-title>
@@ -36,7 +41,6 @@
                   :items="autocomplete_items"
                   v-model="$store.state.autocomplete_selected"
                   v-on:input="selectFromAutocomplete"
-                  prepend-icon="mdi-magnify"
                   label="Enter bus stop or service"
                   flat
                   hide-details
@@ -95,6 +99,11 @@
               </v-list-item-action>
             </template>
           </v-autocomplete>
+          <favorite-button
+                  :name="$store.state.autocomplete_selected"
+                  v-if="autocomplete_items.find(x => x.name === $store.state.autocomplete_selected) !== undefined &&
+                  autocomplete_items.find(x => x.name === $store.state.autocomplete_selected).type === 'stop'"
+          ></favorite-button>
           <v-btn icon
                  :loading="locating"
                  :disabled="locating"
@@ -133,10 +142,12 @@
 
 <script>
   import AnnouncementBox from "@/components/AnnouncementBox";
+  import FavoriteButton from "@/components/FavoriteButton";
 
   export default {
     name: 'App',
     components: {
+      FavoriteButton,
       AnnouncementBox
     },
     mounted() {
@@ -168,7 +179,6 @@
         this.snackbar_message = "Timed out. Check Internet connection.";
         this.snackbar = true;
       }
-
 
     },
     methods: {
@@ -235,6 +245,9 @@
             params: {service_name: this.$store.state.autocomplete_selected}})
                   .catch(e => console.log(e))
         }
+      },
+      isFavorite: function (name) {
+        return this.$store.state.favorites.includes(name)
       }
     },
     data() {
@@ -286,6 +299,7 @@
         get: function () {
           if (this.$route.path.startsWith("/stops")) return 0;
           else if (this.$route.path.startsWith("/services")) return 1;
+          else if (this.$route.path.startsWith("/favorites")) return 2;
           return 0;
         },
         set: function () {

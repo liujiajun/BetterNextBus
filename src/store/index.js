@@ -13,7 +13,8 @@ export default new Vuex.Store({
         autocomplete_selected: "",
         stop_selected: "UTown",
         service_selected: "A1",
-        current_location: null
+        current_location: null,
+        favorites: []
     },
     mutations: {
         getAnnouncements(state, data) {
@@ -101,6 +102,21 @@ export default new Vuex.Store({
         },
         setCurrentLocation(state, location) {
             state.current_location = location;
+        },
+        toggleFavorite(state, name) {
+            if (localStorage.getItem("favorites") === null) {
+                localStorage.setItem("favorites", JSON.stringify(state.favorites))
+            } else {
+                state.favorites = JSON.parse(localStorage.getItem("favorites"))
+            }
+
+            let index = state.favorites.indexOf(name);
+            if(index!==-1){
+                state.favorites.splice(index, 1);
+            } else {
+                state.favorites.push(name);
+            }
+            localStorage.setItem("favorites", JSON.stringify(state.favorites));
         }
     },
     actions: {

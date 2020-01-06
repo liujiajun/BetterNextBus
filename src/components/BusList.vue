@@ -4,7 +4,6 @@
                 class="pt-0 mt-0">
             <v-slide-y-transition
                     group
-                    tag="v-row"
             >
                 <v-col v-for="(service, i) in service_timings"
                        :key="i"
@@ -152,8 +151,7 @@
             this.timer = setInterval(() => {
                 this.updateBusTiming(false)
             }, 30000);
-            this.updateBusTiming(true)
-
+            this.updateBusTiming(true);
         },
         data() {
             return {

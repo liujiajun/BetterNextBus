@@ -1,15 +1,17 @@
 <template>
-    <v-btn
-            v-on:click="$store.commit('toggleFavorite', name)"
-            icon>
-        <v-icon
-                v-if="isFavorite(name)"
-                color="red lighten-1">mdi-heart
-        </v-icon>
-        <v-icon v-else>
-            mdi-heart-outline
-        </v-icon>
-    </v-btn>
+    <div>
+        <v-btn
+                v-on:click="$store.commit('toggleFavorite', name)"
+                icon>
+            <v-icon
+                    v-if="isFavorite(name)"
+                    color="red lighten-1">mdi-heart
+            </v-icon>
+            <v-icon v-else>
+                mdi-heart-outline
+            </v-icon>
+        </v-btn>
+    </div>
 </template>
 
 <script>

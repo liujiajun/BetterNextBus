@@ -75,6 +75,17 @@ export default new Vuex.Store({
                 }
             });
         },
+        sortStopsFavoriteFirst(state) {
+            state.stops.sort((stop1, stop2) => {
+                if (state.favorites.includes(stop1.name) && !state.favorites.includes(stop2.name)) {
+                    return -1;
+                } else if (!state.favorites.includes(stop1.name) && state.favorites.includes(stop2.name)) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            })
+        },
         getServices(state, data) {
             state.services = data
         },

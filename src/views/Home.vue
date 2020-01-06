@@ -95,7 +95,18 @@
                 <v-list-item-subtitle v-text="item.sub_title"></v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <v-icon>{{item.type === 'stop' ? 'mdi-bus-stop' : 'mdi-bus'}}</v-icon>
+                <v-icon
+                        v-if="$store.state.favorites.includes(item.name)"
+                        color="red lighten-1"
+                >
+                  mdi-heart
+                </v-icon>
+                <v-icon v-else-if="item.type==='stop'">
+                  mdi-bus-stop
+                </v-icon>
+                <v-icon v-else>
+                  mdi-bus
+                </v-icon>
               </v-list-item-action>
             </template>
           </v-autocomplete>
@@ -169,6 +180,10 @@
       } finally {
         this.loading = false
       }
+
+      this.$store.commit("toggleFavorite", "");
+      this.$store.commit("sortStopsFavoriteFirst");
+
       if (this.$route.params.bus_stop_name !== undefined) {
         this.$store.commit('setAutocompleteSelected', this.$route.params.bus_stop_name);
       } else if (this.$route.params.service_name !== undefined) {

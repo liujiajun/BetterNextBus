@@ -6,7 +6,6 @@
         >
                 <v-slide-y-transition
                         group
-                        tag="v-row"
                 >
                     <v-col
                             v-for="name in $store.state.favorites"

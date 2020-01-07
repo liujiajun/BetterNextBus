@@ -1,7 +1,8 @@
 # NUSBuses 
 <p align="center"> 
-<img width="128" height="128" src="src/assets/logo.svg">
+<img width="256" height="256" src="src/assets/logo.svg">
 </p>
+
 **NUSBuses** ([nusbuses.com](nusbuses.com)) is a shuttle bus tracker app for the National University of
  Singapore (NUS) community. It has a 
 simple and delightful look, and is blazing fast. 

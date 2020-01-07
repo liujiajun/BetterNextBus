@@ -68,20 +68,6 @@ export default new Vuex.Store({
                 } else {
                     return stop1.name.localeCompare(stop2.name);
                 }
-
-                // if (state.favorites.includes(stop1.name) && !state.favorites.includes(stop2.name)) {
-                //     return -1;
-                // } else if (!state.favorites.includes(stop1.name) && state.favorites.includes(stop2.name)) {
-                //     return 1;
-                // } else {
-                //     if (distance1 < distance2) {
-                //         return -1
-                //     } else if (distance1 > distance2) {
-                //         return 1;
-                //     } else {
-                //         return stop1.name.localeCompare(stop2.name);
-                //     }
-                // }
             });
         },
         sortStopsFavoriteFirst(state) {

@@ -10,7 +10,7 @@
         >
             <v-row align="center">
                 <v-col class="grow">
-                    <div class="body-2 font-weight-bold">Official Announcements from NextBus</div>
+                    <div class="body-2 font-weight-bold">Announcements from NextBus Official</div>
                     <div class="body-2">{{$store.state.announcements[0].text}}</div>
                 </v-col>
             </v-row>

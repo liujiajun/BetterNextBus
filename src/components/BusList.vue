@@ -83,7 +83,6 @@
     import RouteMap from "@/components/RouteMap";
 
     require("promise.prototype.finally").shim();
-    //AIzaSyBx7hn_RmpcwMh7yJVH2JFzo29Oj9EnKOU
 
     export default {
         name: "bus-list",

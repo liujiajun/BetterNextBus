@@ -8,7 +8,6 @@
 
 <script>
     import gmapsInit from "@/utils/gmaps";
-    // import axios from "axios"
     import {RepositoryFactory} from "@/repository/reposiotry-factory";
 
     require("promise.prototype.finally").shim();
@@ -44,7 +43,6 @@
                 for (let key in res) {
                     let bus = res[key];
                     if (this.live_location_markers[bus["vehplate"]] === undefined) {
-                        // eslint-disable-next-line no-console
                         console.log("initial" + bus["lat"] + " " + bus["lng"]);
                         this.live_location_markers[bus["vehplate"]] = new this.google.maps.Marker({
                             position: new this.google.maps.LatLng(bus["lat"], bus["lng"]),
@@ -55,7 +53,6 @@
                         });
                         this.live_location_markers[bus["vehplate"]].setMap(this.gmap);
                     } else {
-                        // eslint-disable-next-line no-console
                         console.log("updating" + bus["lat"] + " " + bus["lng"]);
                         let marker = this.live_location_markers[bus["vehplate"]];
                         marker.setPosition(new this.google.maps.LatLng(bus["lat"], bus["lng"]));
@@ -108,7 +105,6 @@
                 this.timer = setInterval(this.updateBusLiveLocations, 5000);
                 this.updateBusLiveLocations();
             } catch (e) {
-                // eslint-disable-next-line no-console
                 console.log(e);
             }
         },

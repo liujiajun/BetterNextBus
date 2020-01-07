@@ -38,6 +38,7 @@
                     </template>
                     <v-toolbar-title class="title mr-6 hidden-sm-and-down">BetterNextBus</v-toolbar-title>
                     <v-autocomplete
+                            ref="ac"
                             :items="autocomplete_items"
                             auto-select-first
                             chips
@@ -247,6 +248,7 @@
                 });
             },
             selectFromAutocomplete() {
+                this.$refs.ac.blur();
                 let found = this.autocomplete_items
                     .find(x => x.name === this.$store.state.autocomplete_selected);
                 if (found.type === "stop") {

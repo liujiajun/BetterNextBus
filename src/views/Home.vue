@@ -173,7 +173,6 @@
       this.loading = true;
       try {
         await this.$store.dispatch("getStops");
-        await this.$store.dispatch('getServices');
       } catch (e) {
         this.snackbar_message = "Timed out. Check Internet connection.";
         this.snackbar = true;
@@ -191,10 +190,11 @@
       }
 
       try {
-        for (const service of this.$store.state.services) {
-          await this.$store.dispatch("getPickupPoints", service.service_name);
-          await this.$store.dispatch("getCheckPoints", service.service_name);
-        }
+        await this.$store.dispatch('getServices');
+        // for (const service of this.$store.state.services) {
+        //   await this.$store.dispatch("getPickupPoints", service.service_name);
+        //   await this.$store.dispatch("getCheckPoints", service.service_name);
+        // }
         console.log("Finished loading checkpoints and pick-up points.")
       } catch (e) {
         this.snackbar_message = "Timed out. Check Internet connection.";

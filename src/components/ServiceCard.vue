@@ -52,6 +52,8 @@
         components: {FavoriteButton},
         methods: {
             getStop(name) {
+                if (this.$store.state.stops.find(x => x.name === name) === undefined)
+                    console.log(this.$store.state.stops.find(x => x.name === name) + ' ' + name)
                 return this.$store.state.stops.find(x => x.name === name)
             },
             gotoStop(name) {

@@ -1,4 +1,4 @@
-const BASE_URL = "https://better-nextbus.appspot.com"
+const BASE_URL = "https://better-nextbus.appspot.com";
 
 import axios from 'axios'
 

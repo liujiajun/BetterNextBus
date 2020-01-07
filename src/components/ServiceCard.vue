@@ -5,34 +5,34 @@
                     dense
             >
                 <v-timeline-item
-                        v-for="(pickupPoint, i) in service.pickup_points"
+                        :color="(i===0 || i===service.pickup_points.length-1) ? 'orange' : 'blue'"
                         :key="i"
                         small
-                        :color="(i===0 || i===service.pickup_points.length-1) ? 'orange' : 'blue'"
+                        v-for="(pickupPoint, i) in service.pickup_points"
                 >
                     <v-row class="pt-1">
                         <v-col>
                             <div>
                                 {{getStop(pickupPoint.name).short_name}}
                                 <v-chip
-                                        v-if="getStop(pickupPoint.name).name===nearest_stop_name"
                                         class="white--text ml-0"
                                         color="green darken-2"
                                         label
                                         small
+                                        v-if="getStop(pickupPoint.name).name===nearest_stop_name"
                                 >
                                     Nearest
                                 </v-chip>
                             </div>
                             <div class="caption">{{getStop(pickupPoint.name).long_name}}</div>
                         </v-col>
-                        <v-col cols="1" class="pr-2 mr-2">
+                        <v-col class="pr-2 mr-2" cols="1">
                             <favorite-button :name="pickupPoint.name"></favorite-button>
                         </v-col>
-                        <v-col cols="2" class="pr-1 mr-3">
+                        <v-col class="pr-1 mr-3" cols="2">
                             <v-btn
-                                    icon
                                     @click="gotoStop(pickupPoint.name)"
+                                    icon
                             >
                                 <v-icon>mdi-bus-stop</v-icon>
                             </v-btn>
@@ -47,13 +47,14 @@
 
 <script>
     import FavoriteButton from "@/components/FavoriteButton";
+
     export default {
         name: "service-card",
         components: {FavoriteButton},
         methods: {
             getStop(name) {
                 if (this.$store.state.stops.find(x => x.name === name) === undefined)
-                    console.log(this.$store.state.stops.find(x => x.name === name) + ' ' + name)
+                    console.log(this.$store.state.stops.find(x => x.name === name) + ' ' + name);
                 return this.$store.state.stops.find(x => x.name === name)
             },
             gotoStop(name) {

@@ -17,16 +17,16 @@
                 </v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
-<!--        <v-card-actions>-->
-<!--            <v-spacer></v-spacer>-->
-<!--            <v-btn-->
-<!--                    text-->
-<!--                    @click="show_maps"-->
-<!--            >-->
-<!--                LIVE MAP-->
-<!--                <v-icon right>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>-->
-<!--            </v-btn>-->
-<!--        </v-card-actions>-->
+        <!--        <v-card-actions>-->
+        <!--            <v-spacer></v-spacer>-->
+        <!--            <v-btn-->
+        <!--                    text-->
+        <!--                    @click="show_maps"-->
+        <!--            >-->
+        <!--                LIVE MAP-->
+        <!--                <v-icon right>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>-->
+        <!--            </v-btn>-->
+        <!--        </v-card-actions>-->
     </v-card>
 </template>
 

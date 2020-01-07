@@ -1,12 +1,12 @@
 <template>
     <v-container
-            v-if="alert"
-            class="pb-0">
+            class="pb-0"
+            v-if="alert">
         <v-alert
-                v-model="alert"
                 color="teal darken-3"
-                text
                 dismissible
+                text
+                v-model="alert"
         >
             <v-row align="center">
                 <v-col class="grow">

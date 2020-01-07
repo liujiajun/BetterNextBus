@@ -5,14 +5,14 @@
             <v-slide-y-transition
                     group
             >
-                <v-col v-for="(service, i) in service_timings"
+                <v-col :cols="12"
                        :key="i"
-                       :cols="12"
+                       v-for="(service, i) in service_timings"
                 >
                     <v-card
+                            class="pt-0 mt-0"
                             color="teal"
                             dark
-                            class="pt-0 mt-0"
                     >
                         <v-list-item two-line>
                             <v-list-item-avatar color="white" size="48">
@@ -55,16 +55,16 @@
                         </v-expand-transition>
                         <v-card-actions class="teal darken-1 text--primary">
                             <v-btn
-                                    icon
                                     @click="gotoService(service_timings[i].service_name)"
+                                    icon
                             >
                                 <v-icon color="white">mdi-map-search-outline</v-icon>
                             </v-btn>
                             <v-spacer></v-spacer>
                             <v-btn
+                                    @click="showMap(i)"
                                     color="white"
                                     text
-                                    @click="showMap(i)"
                             >
                                 LIVE MAP
                                 <v-icon>{{ service_timings[i].show_map ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
@@ -130,11 +130,10 @@
 
             },
             showMap(cardIndex) {
-                for(let i=0; i<this.service_timings.length; i++) {
+                for (let i = 0; i < this.service_timings.length; i++) {
                     if (cardIndex === i) {
                         this.service_timings[cardIndex].show_map = !this.service_timings[cardIndex].show_map;
-                    }
-                    else {
+                    } else {
                         this.service_timings[i].show_map = false;
 
                     }
@@ -143,14 +142,15 @@
             gotoService(name) {
                 this.$router.push({
                     name: 'service-card',
-                    params: {service_name: name}})
+                    params: {service_name: name}
+                })
                     .catch(e => console.log(e))
             },
             hasSubtitle(name) {
                 return name.includes('(')
             },
             getSubtitle(name) {
-                return name.substring(name.indexOf('(') + 1, name.length-1)
+                return name.substring(name.indexOf('(') + 1, name.length - 1)
             },
             getTitle(name) {
                 if (name.includes('(')) {

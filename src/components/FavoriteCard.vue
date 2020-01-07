@@ -8,14 +8,14 @@
                 {{stop.short_name}}
                 <favorite-button :name="stop_name"></favorite-button>
                 <v-spacer></v-spacer>
-                <v-btn icon class="drag-handle">
+                <v-btn class="drag-handle" icon>
                     <v-icon>mdi-drag-horizontal</v-icon>
                 </v-btn>
             </v-card-title>
             <v-card-subtitle class="caption pb-1 mb-1">{{stop.long_name}}</v-card-subtitle>
             <v-container
-                    v-if="loading"
-                    class="text-center">
+                    class="text-center"
+                    v-if="loading">
                 <v-progress-circular
                         indeterminate
                         size="48"
@@ -23,24 +23,24 @@
                 </v-progress-circular>
             </v-container>
             <v-list
-                    v-else-if="!moving"
                     class="pt-1 pb-0"
                     color="teal darken-1"
                     dark
+                    v-else-if="!moving"
             >
                 <v-list-item
-                        v-for="service in service_timings"
                         :key="service.service_name"
+                        v-for="service in service_timings"
                 >
                     <v-row>
                         <v-col cols="4">{{service.service_name}}</v-col>
-                        <v-col cols="4" class="text-center">
+                        <v-col class="text-center" cols="4">
                             <span class="font-weight-bold">{{service.arrival_time}}</span>
                             <span class="caption" v-if="service.arrival_time==='1'"> min</span>
                             <span class="caption"
                                   v-if="service.arrival_time!=='1' && service.arrival_time!=='Arr' && service.arrival_time!=='-'"> mins </span>
                         </v-col>
-                        <v-col cols="4" class="text-center">
+                        <v-col class="text-center" cols="4">
                             <span class="font-weight-bold">{{service.next_arrival_time}}</span>
                             <span class="caption" v-if="service.next_arrival_time==='1'"> min</span>
                             <span class="caption"

@@ -2,13 +2,13 @@ import repository from "./repository"
 
 const RESOURCE = "/PickupPoint?route_code=";
 const CORRECTION = [
-    { original: 'PGPE', new: 'PGP'},
-    { original: 'PGPEN', new: 'PGP'},
-    { original: 'PGPEND', new: 'PGP'},
-    { original: 'KTR-E', new: 'KR-BT'},
-    { original: 'KTR-EN', new: 'KR-BT'},
-    { original: 'KR-BTE', new: 'KR-BT'},
-    { original: 'innovation 4.0(R)', new: 'innovation 4.0'},
+    {original: 'PGPE', new: 'PGP'},
+    {original: 'PGPEN', new: 'PGP'},
+    {original: 'PGPEND', new: 'PGP'},
+    {original: 'KTR-E', new: 'KR-BT'},
+    {original: 'KTR-EN', new: 'KR-BT'},
+    {original: 'KR-BTE', new: 'KR-BT'},
+    {original: 'innovation 4.0(R)', new: 'innovation 4.0'},
 ];
 
 export default {

@@ -1,6 +1,6 @@
 <template>
     <div :id="mapName">
-        <v-container fluid class="route-map">
+        <v-container class="route-map" fluid>
 
         </v-container>
     </div>
@@ -33,7 +33,7 @@
                 this.$store.state.services.forEach(route => {
                     if (route.service_name === busName) {
                         // eslint-disable-next-line no-console
-                        console.log(route)
+                        console.log(route);
                         return route
                     }
                 })
@@ -69,10 +69,10 @@
 
             try {
                 this.google = await gmapsInit();
-                const element = document.getElementById(this.mapName).getElementsByClassName("route-map")[0]
+                const element = document.getElementById(this.mapName).getElementsByClassName("route-map")[0];
                 const options = {
                     zoom: 17,
-                    center: new this.google.maps.LatLng(1.29199190036396,103.78027611345),
+                    center: new this.google.maps.LatLng(1.29199190036396, 103.78027611345),
                     disableDefaultUI: true,
                     fullscreenControl: true
                 };
@@ -98,21 +98,21 @@
                             }
                             var marker = new this.google.maps.Marker({
                                 position: point,
-                                label:{text: point.name, color: "white", fontSize: "8px"},
+                                label: {text: point.name, color: "white", fontSize: "8px"},
                             });
                             marker.setMap(this.gmap)
                         })
                     }
                 });
 
-                this.timer = setInterval(this.updateBusLiveLocations, 5000)
+                this.timer = setInterval(this.updateBusLiveLocations, 5000);
                 this.updateBusLiveLocations()
             } catch (e) {
                 // eslint-disable-next-line no-console
                 console.log(e)
             }
         },
-        beforeDestroy () {
+        beforeDestroy() {
             clearInterval(this.timer)
         }
     }

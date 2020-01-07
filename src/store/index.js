@@ -23,7 +23,7 @@ export default new Vuex.Store({
         },
         getStops(state, data) {
             state.stops = data;
-            state.stops_by_distance =data;
+            state.stops_by_distance = data;
         },
         sortStops(state, latLng) {
             state.stops.sort((stop1, stop2) => {
@@ -132,7 +132,7 @@ export default new Vuex.Store({
 
             if (name === "") return;
             let index = state.favorites.indexOf(name);
-            if(index!==-1){
+            if (index !== -1) {
                 state.favorites.splice(index, 1);
             } else {
                 state.favorites.push(name);

@@ -61,7 +61,7 @@
                             </v-list-item>
                         </template>
 
-                        <template v-slot:selection="{ attr, on, item, selected }">
+                        <template v-slot:selection="{ attr, item, selected }">
                             <v-chip
                                     :input-value="selected"
                                     @click:close="$store.commit('setAutocompleteSelected', '')"
@@ -158,11 +158,11 @@
 </template>
 
 <script>
-  import AnnouncementBox from "@/components/AnnouncementBox";
-  import FavoriteButton from "@/components/FavoriteButton";
+    import AnnouncementBox from "@/components/AnnouncementBox";
+    import FavoriteButton from "@/components/FavoriteButton";
 
-  export default {
-        name: 'App',
+    export default {
+        name: "App",
         components: {
             FavoriteButton,
             AnnouncementBox
@@ -172,9 +172,9 @@
         async created() {
             this.loading = true;
             if (this.$route.params.bus_stop_name !== undefined) {
-                this.$store.commit('setAutocompleteSelected', this.$route.params.bus_stop_name);
+                this.$store.commit("setAutocompleteSelected", this.$route.params.bus_stop_name);
             } else if (this.$route.params.service_name !== undefined) {
-                this.$store.commit('setAutocompleteSelected', this.$route.params.service_name);
+                this.$store.commit("setAutocompleteSelected", this.$route.params.service_name);
             }
 
             this.$store.dispatch("getStops")
@@ -187,10 +187,10 @@
                     this.snackbar = true;
                 })
                 .finally(() => {
-                    this.loading = false
+                    this.loading = false;
                 });
 
-            this.$store.dispatch('getServices').catch(() => {
+            this.$store.dispatch("getServices").catch(() => {
                 this.snackbar_message = "Failed to fetch bus services. Check Internet connection.";
                 this.snackbar = true;
             });
@@ -198,13 +198,13 @@
         },
         methods: {
             setLoadingState(isLoading) {
-                this.loading = isLoading
+                this.loading = isLoading;
             },
             async getLocation() {
                 return new Promise((resolve, reject) => {
 
                     if (!("geolocation" in navigator)) {
-                        reject(new Error('Geolocation is not available.'));
+                        reject(new Error("Geolocation is not available."));
                     }
                     navigator.geolocation.getCurrentPosition(pos => {
 
@@ -221,15 +221,15 @@
             async locate() {
                 try {
                     let location = await this.getLocation();
-                    this.$store.commit("setCurrentLocation", location)
+                    this.$store.commit("setCurrentLocation", location);
                 } catch (e) {
                     if (e.code === e.PERMISSION_DENIED) {
-                        this.snackbar_message = "Permission denied. Try enabling location service."
+                        this.snackbar_message = "Permission denied. Try enabling location service.";
                     } else if (e.code === e.POSITION_UNAVAILABLE || e.code === e.TIMEOUT) {
                         console.log(e);
-                        this.snackbar_message = "Geolocation not available at the moment. Try again later."
+                        this.snackbar_message = "Geolocation not available at the moment. Try again later.";
                     } else {
-                        this.snackbar_message = "Unknown error when getting geolocation."
+                        this.snackbar_message = "Unknown error when getting geolocation.";
                     }
                     this.snackbar = true;
                     this.locating = false;
@@ -240,31 +240,31 @@
                 this.locate().then(() => {
                     this.locating = false;
                     this.$router.push({
-                        name: 'bus-list',
+                        name: "bus-list",
                         params: {bus_stop_name: this.$store.state.stops[0].name}
                     })
-                        .catch(e => console.log(e))
-                })
+                        .catch(e => console.log(e));
+                });
             },
             selectFromAutocomplete() {
                 let found = this.autocomplete_items
                     .find(x => x.name === this.$store.state.autocomplete_selected);
-                if (found.type === 'stop') {
+                if (found.type === "stop") {
                     this.$router.push({
-                        name: 'bus-list',
+                        name: "bus-list",
                         params: {bus_stop_name: this.$store.state.autocomplete_selected}
                     })
-                        .catch(e => console.log(e))
+                        .catch(e => console.log(e));
                 } else {
                     this.$router.push({
-                        name: 'service-card',
+                        name: "service-card",
                         params: {service_name: this.$store.state.autocomplete_selected}
                     })
-                        .catch(e => console.log(e))
+                        .catch(e => console.log(e));
                 }
             },
             isFavorite: function (name) {
-                return this.$store.state.favorites.includes(name)
+                return this.$store.state.favorites.includes(name);
             }
         },
         data() {
@@ -274,15 +274,15 @@
                 location: null,
                 snackbar: false,
                 snackbar_message: "",
-            }
+            };
         },
         watch: {
             "$route.path": function () {
                 if (this.$route.path.startsWith("/stops")) {
-                    this.$store.commit('setAutocompleteSelected', this.$route.params.bus_stop_name);
+                    this.$store.commit("setAutocompleteSelected", this.$route.params.bus_stop_name);
                     this.$store.commit("setStopSelected", this.$route.params.bus_stop_name);
                 } else if (this.$route.path.startsWith("/services")) {
-                    this.$store.commit('setAutocompleteSelected', this.$route.params.service_name);
+                    this.$store.commit("setAutocompleteSelected", this.$route.params.service_name);
                     this.$store.commit("setServiceSelected", this.$route.params.service_name);
                 }
             },
@@ -298,25 +298,25 @@
                 let res = [];
                 for (const stop of this.$store.state.stops) {
                     res.push({
-                        type: 'stop',
+                        type: "stop",
                         search_field: stop.search_field,
                         name: stop.name,
                         title: stop.long_name,
                         sub_title: stop.short_name
-                    })
+                    });
                 }
 
                 for (const service of this.$store.state.services) {
                     res.push({
-                        type: 'service',
+                        type: "service",
                         search_field: service.service_name + service.description,
                         name: service.service_name,
                         title: service.service_name,
                         sub_title: service.description
-                    })
+                    });
                 }
 
-                return res
+                return res;
             },
             active_tab: {
                 get: function () {

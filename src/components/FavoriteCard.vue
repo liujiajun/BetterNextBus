@@ -65,9 +65,9 @@
         data() {
             return {
                 service_timings: [],
-                timer: '',
+                timer: "",
                 loading: true
-            }
+            };
         },
         method: {
             async updateServiceTiming() {
@@ -76,7 +76,7 @@
                     let found = this.service_timings.find(x => x.service_name === service.service_name);
                     if (found === undefined || found === null) return;
                     found.arrival_time = service.arrival_time;
-                    found.next_arrival_time = service.next_arrival_time
+                    found.next_arrival_time = service.next_arrival_time;
                 });
             }
         },
@@ -94,9 +94,9 @@
             this.loading = false;
         },
         beforeDestroy() {
-            clearInterval(this.timer)
+            clearInterval(this.timer);
         }
-    }
+    };
 </script>
 
 <style scoped>

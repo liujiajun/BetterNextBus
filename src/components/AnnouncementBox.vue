@@ -24,20 +24,20 @@
         data() {
             return {
                 alert: false,
-            }
+            };
         },
         watch: {
             "alert": function (newVal) {
                 if (newVal === false) {
-                    localStorage.setItem('closedAnnouncementId', this.$store.state.announcements[0].id);
+                    localStorage.setItem("closedAnnouncementId", this.$store.state.announcements[0].id);
                 }
             }
         },
         async created() {
             await this.$store.dispatch("getAnnouncements");
-            this.alert = localStorage.getItem("closedAnnouncementId") !== this.$store.state.announcements[0].id
+            this.alert = localStorage.getItem("closedAnnouncementId") !== this.$store.state.announcements[0].id;
         }
-    }
+    };
 </script>
 
 <style scoped>

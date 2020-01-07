@@ -1,4 +1,4 @@
-import repository from "./repository"
+import repository from "./repository";
 
 // const RESOURCE = "/ServiceDescription";
 const RESOURCE = "/BusInfo";
@@ -18,4 +18,4 @@ export default {
         // return routes
         return res.data;
     }
-}
+};

@@ -6,7 +6,7 @@
     export default {
         props: ["data"],
         name: "About"
-    }
+    };
 </script>
 
 <style scoped>

@@ -47,16 +47,16 @@
 </template>
 
 <script>
-  //    "material-design-icons-iconfont": "^5.0.1",
-  import {GITHUB_URL} from '@/utils/config'
+    //    "material-design-icons-iconfont": "^5.0.1",
+    import {GITHUB_URL} from "@/utils/config";
 
-  export default {
+    export default {
         data() {
             return {
                 github_url: GITHUB_URL
-            }
+            };
         }
-    }
+    };
 </script>
 <style>
 

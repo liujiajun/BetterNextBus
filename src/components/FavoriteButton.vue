@@ -20,10 +20,10 @@
         props: ["name"],
         methods: {
             isFavorite(name) {
-                return this.$store.state.favorites.includes(name)
+                return this.$store.state.favorites.includes(name);
             }
         }
-    }
+    };
 </script>
 
 <style scoped>

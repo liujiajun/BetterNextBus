@@ -24,10 +24,10 @@
         methods: {
             selectTab(name) {
                 this.$router.push({
-                    name: 'service-card',
+                    name: "service-card",
                     params: {service_name: name}
                 })
-                    .catch(e => console.log(e))
+                    .catch(e => console.log(e));
             }
         },
         computed: {
@@ -35,14 +35,14 @@
                 get: function () {
                     let index = this.$store.state.services.findIndex(x => x.service_name === this.$route.params.service_name);
                     if (index === undefined) return 0;
-                    return index
+                    return index;
                 },
                 set: function () {
 
                 }
             }
         }
-    }
+    };
 </script>
 
 <style scoped>

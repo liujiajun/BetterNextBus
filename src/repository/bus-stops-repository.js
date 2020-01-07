@@ -1,4 +1,4 @@
-import repository from "./repository"
+import repository from "./repository";
 
 const RESOURCE = "/BusStops";
 
@@ -15,8 +15,8 @@ export default {
                 search_field: stop["ShortName"] + stop["LongName"],
                 latitude: stop["latitude"],
                 longitude: stop["longitude"]
-            })
+            });
         });
-        return stops
+        return stops;
     }
-}
+};

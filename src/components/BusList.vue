@@ -33,13 +33,13 @@
                                         <v-col cols="6">
                                             <v-list-item-title class="headline text-right">
                                                 <span class="headline">{{service.arrival_time}}</span>
-                                                <span v-if="service.arrival_time=='1'"> min</span>
-                                                <span v-if="service.arrival_time!='1' && service.arrival_time!='Arr' && service.arrival_time!='-'"> mins </span>
+                                                <span v-if="service.arrival_time==='1'"> min</span>
+                                                <span v-if="service.arrival_time!=='1' && service.arrival_time!=='Arr' && service.arrival_time!=='-'"> mins </span>
                                             </v-list-item-title>
                                             <v-list-item-subtitle class="text-right">
                                                 <span>{{service.next_arrival_time}}</span>
-                                                <span v-if="service.next_arrival_time=='1'"> min</span>
-                                                <span v-if="service.next_arrival_time!='1' && service.next_arrival_time!='Arr' && service.next_arrival_time!='-'"> mins </span>
+                                                <span v-if="service.next_arrival_time==='1'"> min</span>
+                                                <span v-if="service.next_arrival_time!=='1' && service.next_arrival_time!=='Arr' && service.next_arrival_time!=='-'"> mins </span>
                                             </v-list-item-subtitle>
                                         </v-col>
                                     </v-row>
@@ -67,7 +67,7 @@
                                     text
                             >
                                 LIVE MAP
-                                <v-icon>{{ service_timings[i].show_map ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+                                <v-icon>{{ service_timings[i].show_map ? "mdi-chevron-up" : "mdi-chevron-down" }}
                                 </v-icon>
                             </v-btn>
                         </v-card-actions>
@@ -82,26 +82,26 @@
     import {RepositoryFactory} from "@/repository/reposiotry-factory";
     import RouteMap from "@/components/RouteMap";
 
-    require('promise.prototype.finally').shim();
+    require("promise.prototype.finally").shim();
     //AIzaSyBx7hn_RmpcwMh7yJVH2JFzo29Oj9EnKOU
 
     export default {
-        name: 'bus-list',
+        name: "bus-list",
         components: {RouteMap},
         props: {
             bus_stop_name: String,
         },
         async created() {
             this.timer = setInterval(() => {
-                this.updateBusTiming(false)
+                this.updateBusTiming(false);
             }, 30000);
             this.updateBusTiming(true);
         },
         data() {
             return {
                 service_timings: [],
-                timer: '',
-            }
+                timer: "",
+            };
         },
         methods: {
             async updateBusTiming(refresh) {
@@ -122,10 +122,10 @@
                         let found = this.service_timings.find(x => x.service_name === service.service_name);
                         if (found === undefined || found === null) return;
                         found.arrival_time = service.arrival_time;
-                        found.next_arrival_time = service.next_arrival_time
+                        found.next_arrival_time = service.next_arrival_time;
                     });
                 } catch (e) {
-                    this.$emit("onLoadingStateChange", false)
+                    this.$emit("onLoadingStateChange", false);
                 }
 
             },
@@ -141,31 +141,31 @@
             },
             gotoService(name) {
                 this.$router.push({
-                    name: 'service-card',
+                    name: "service-card",
                     params: {service_name: name}
                 })
-                    .catch(e => console.log(e))
+                    .catch(e => console.log(e));
             },
             hasSubtitle(name) {
-                return name.includes('(')
+                return name.includes("(");
             },
             getSubtitle(name) {
-                return name.substring(name.indexOf('(') + 1, name.length - 1)
+                return name.substring(name.indexOf("(") + 1, name.length - 1);
             },
             getTitle(name) {
-                if (name.includes('(')) {
-                    return name.substring(0, name.indexOf('('));
+                if (name.includes("(")) {
+                    return name.substring(0, name.indexOf("("));
                 }
                 return name;
             }
         },
         watch: {
-            'bus_stop_name': async function () {
-                this.updateBusTiming(true)
+            "bus_stop_name": async function () {
+                this.updateBusTiming(true);
             }
         },
         beforeDestroy() {
-            clearInterval(this.timer)
+            clearInterval(this.timer);
         }
     };
 </script>

@@ -9,7 +9,7 @@
                             flat
                     >
                         <v-img
-                                contain="true"
+                                contain
                                 height="250"
                                 src="../assets/logo.svg"
                         >
@@ -22,11 +22,14 @@
                         <div class="feedback">
                             <v-card-title class="subtitle justify-center teal--text">Give Us Feedback</v-card-title>
                             <v-card-text class="text-center">NUSBuses is in testing phase. We value your feedback
-                                including bug report, feature request.
-                                You can contact us through Github issues or email.
+                                                             including bug report, feature request.
+                                                             You can contact us through Github issues or email.
                             </v-card-text>
                             <v-row justify="center">
-                                <v-btn :href="github_url + '/issues'" fab large
+                                <v-btn :href="github_url + '/issues'"
+                                       fab
+                                       large
+                                       target="_blank"
                                        text
                                 >
                                     <v-icon large>mdi-github-circle</v-icon>
@@ -41,10 +44,12 @@
                         <div class="contribute">
                             <v-card-title class="subtitle justify-center teal--text">Contribute</v-card-title>
                             <v-card-text class="text-center">NUSBuses is a student-initiated, open-source project.
-                                Contribute to NUSBuses now on GitHub!
+                                                             Contribute to NUSBuses now on GitHub!
                             </v-card-text>
                             <v-row justify="center">
-                                <v-btn :href="github_url" color="black" fab large
+                                <v-btn :href="github_url" color="black"
+                                       fab
+                                       large
                                        target="_blank"
                                        text
                                 >
@@ -60,14 +65,14 @@
 </template>
 
 <script>
-    import {EMAIL_ENCODED, GITHUB_URL} from '@/utils/config'
+    import {EMAIL_ENCODED, GITHUB_URL} from "@/utils/config";
 
     export default {
         data() {
             return {
                 github_url: GITHUB_URL,
                 email_decoded: atob(EMAIL_ENCODED)
-            }
+            };
         }
-    }
+    };
 </script>

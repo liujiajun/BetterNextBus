@@ -1,4 +1,4 @@
-import repository from "./repository"
+import repository from "./repository";
 
 const RESOURCE = "/ShuttleService?busstopname=";
 
@@ -12,8 +12,8 @@ export default {
                 arrival_time: bus["arrivalTime"],
                 next_arrival_time: bus["nextArrivalTime"],
                 show_map: false
-            })
+            });
         });
-        return buses
+        return buses;
     }
-}
+};

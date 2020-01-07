@@ -1,4 +1,4 @@
-import repository from "./repository"
+import repository from "./repository";
 
 const RESOURCE = "/Announcements";
 
@@ -11,8 +11,8 @@ export default {
                 id: announcement["ID"],
                 text: announcement["Text"],
                 date: announcement["Created_On"]
-            })
+            });
         });
-        return announcements
+        return announcements;
     }
-}
+};

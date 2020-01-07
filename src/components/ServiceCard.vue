@@ -54,32 +54,32 @@
         methods: {
             getStop(name) {
                 if (this.$store.state.stops.find(x => x.name === name) === undefined)
-                    console.log(this.$store.state.stops.find(x => x.name === name) + ' ' + name);
-                return this.$store.state.stops.find(x => x.name === name)
+                    console.log(this.$store.state.stops.find(x => x.name === name) + " " + name);
+                return this.$store.state.stops.find(x => x.name === name);
             },
             gotoStop(name) {
                 this.$router.push({
-                    name: 'bus-list',
+                    name: "bus-list",
                     params: {bus_stop_name: name}
                 })
-                    .catch(e => console.log(e))
+                    .catch(e => console.log(e));
             }
         },
         computed: {
             service: function () {
-                return this.$store.state.services.find(x => x.service_name === this.$store.state.service_selected)
+                return this.$store.state.services.find(x => x.service_name === this.$store.state.service_selected);
             },
             nearest_stop_name: function () {
                 if (this.$store.state.current_location === null) return "";
                 for (const stop of this.$store.state.stops) {
                     for (const pk of this.service.pickup_points) {
-                        if (stop.name === pk.name) return stop.name
+                        if (stop.name === pk.name) return stop.name;
                     }
                 }
                 return "";
             }
         }
-    }
+    };
 </script>
 
 <style scoped>

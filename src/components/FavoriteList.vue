@@ -34,7 +34,7 @@
 
 <script>
     import FavoriteCard from "@/components/FavoriteCard";
-    import draggable from 'vuedraggable'
+    import draggable from "vuedraggable";
 
     export default {
         name: "favorite-list",
@@ -45,22 +45,22 @@
         data() {
             return {
                 moving: false
-            }
+            };
         },
         mounted() {
-            this.$store.commit("toggleFavorite", "")
+            this.$store.commit("toggleFavorite", "");
         },
         computed: {
             favorites: {
                 get() {
-                    return this.$store.state.favorites
+                    return this.$store.state.favorites;
                 },
                 set(val) {
-                    this.$store.commit("updateFavorites", val)
+                    this.$store.commit("updateFavorites", val);
                 }
             }
         }
-    }
+    };
 </script>
 
 <style scoped>

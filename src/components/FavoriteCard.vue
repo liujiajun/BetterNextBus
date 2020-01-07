@@ -23,7 +23,7 @@
                 </v-progress-circular>
             </v-container>
             <v-list
-                    v-else
+                    v-else-if="!moving"
                     class="pt-1 pb-0"
                     color="teal darken-1"
                     dark
@@ -61,7 +61,7 @@
     export default {
         name: "favorite-card",
         components: {FavoriteButton},
-        props: ["stop_name"],
+        props: ["stop_name", "moving"],
         data() {
             return {
                 service_timings: [],

@@ -48,7 +48,9 @@
                         </v-list-item>
                         <v-expand-transition>
                             <div v-if="service_timings[i].show_map">
-                                <route-map :bus="service_timings[i].service_name" :stop="bus_stop_name"></route-map>
+                                <route-map :bus="getTitle(service_timings[i].service_name)"
+                                           :stop="bus_stop_name">
+                                </route-map>
                             </div>
                         </v-expand-transition>
                         <v-card-actions class="teal darken-1 text--primary">
@@ -151,9 +153,10 @@
                 return name.substring(name.indexOf('(') + 1, name.length-1)
             },
             getTitle(name) {
-                if (name.includes('('))
+                if (name.includes('(')) {
                     return name.substring(0, name.indexOf('('));
-                return name
+                }
+                return name;
             }
         },
         watch: {

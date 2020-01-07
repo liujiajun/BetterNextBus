@@ -7,7 +7,10 @@
             <draggable
                     v-model="favorites"
                     handle=".drag-handle"
+                    @start="moving=true"
+                    @end="moving=false"
             >
+
                 <v-slide-y-transition
                         group
                 >
@@ -15,7 +18,7 @@
                             v-for="name in favorites"
                             :key="name"
                             cols="12">
-                        <favorite-card :stop_name="name"></favorite-card>
+                        <favorite-card :stop_name="name" :moving="moving"></favorite-card>
                     </v-col>
                 </v-slide-y-transition>
             </draggable>
@@ -38,6 +41,11 @@
         components: {
             FavoriteCard,
             draggable
+        },
+        data() {
+            return {
+                moving: false
+            }
         },
         mounted() {
             this.$store.commit("toggleFavorite", "")

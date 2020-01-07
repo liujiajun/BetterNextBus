@@ -5,11 +5,14 @@
                 dark
         >
             <v-card-title class="title pt-2">
-                {{stop.long_name}}
-                <v-spacer></v-spacer>
+                {{stop.short_name}}
                 <favorite-button :name="stop_name"></favorite-button>
+                <v-spacer></v-spacer>
+                <v-btn icon class="drag-handle">
+                    <v-icon>mdi-drag-horizontal</v-icon>
+                </v-btn>
             </v-card-title>
-            <v-card-subtitle class="caption pb-1 mb-1">{{stop.short_name}}</v-card-subtitle>
+            <v-card-subtitle class="caption pb-1 mb-1">{{stop.long_name}}</v-card-subtitle>
             <v-container
                     v-if="loading"
                     class="text-center">
@@ -34,12 +37,14 @@
                         <v-col cols="4" class="text-center">
                             <span class="font-weight-bold">{{service.arrival_time}}</span>
                             <span class="caption" v-if="service.arrival_time==='1'"> min</span>
-                            <span class="caption" v-if="service.arrival_time!=='1' && service.arrival_time!=='Arr' && service.arrival_time!=='-'"> mins </span>
+                            <span class="caption"
+                                  v-if="service.arrival_time!=='1' && service.arrival_time!=='Arr' && service.arrival_time!=='-'"> mins </span>
                         </v-col>
                         <v-col cols="4" class="text-center">
                             <span class="font-weight-bold">{{service.next_arrival_time}}</span>
                             <span class="caption" v-if="service.next_arrival_time==='1'"> min</span>
-                            <span class="caption" v-if="service.next_arrival_time!=='1' && service.next_arrival_time!=='Arr' && service.next_arrival_time!=='-'"> mins </span>
+                            <span class="caption"
+                                  v-if="service.next_arrival_time!=='1' && service.next_arrival_time!=='Arr' && service.next_arrival_time!=='-'"> mins </span>
                         </v-col>
                     </v-row>
 
@@ -77,7 +82,10 @@
         },
         computed: {
             stop: function () {
-                return this.$store.state.stops.find(x => x.name === this.stop_name)
+                let found = this.$store.state.stops.find(x => x.name === this.stop_name);
+                if (found !== undefined)
+                    return found;
+                return {long_name: ""};
             }
         },
         async mounted() {

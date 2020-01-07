@@ -8,6 +8,7 @@ export default new Vuex.Store({
     state: {
         announcements: [],
         stops: [],
+        stops_by_distance: [],
         services: [],
         active_tab: 0,
         autocomplete_selected: "",
@@ -21,7 +22,8 @@ export default new Vuex.Store({
             state.announcements = data
         },
         getStops(state, data) {
-            state.stops = data
+            state.stops = data;
+            state.stops_by_distance =data;
         },
         sortStops(state, latLng) {
             state.stops.sort((stop1, stop2) => {
@@ -50,29 +52,36 @@ export default new Vuex.Store({
                     }
                 }
 
-                var distance1 = getDistance(
-                    Number(stop1.latitude),
-                    Number(stop1.longitude),
-                    latLng.latitude,
-                    latLng.longitude,
-                    "M"
-                );
-
-                var distance2 = getDistance(
-                    Number(stop2.latitude),
-                    Number(stop2.longitude),
-                    latLng.latitude,
-                    latLng.longitude,
-                    "M"
-                );
-
-                if (distance1 > distance2) {
-                    return 1
-                } else if (distance1 < distance2) {
-                    return -1
+                let distance1, distance2;
+                if (latLng === null) {
+                    distance1 = 0;
+                    distance2 = 0;
                 } else {
-                    return 0
+                    distance1 = getDistance(Number(stop1.latitude), Number(stop1.longitude), latLng.latitude, latLng.longitude, "M");
+                    distance2 = getDistance(Number(stop2.latitude), Number(stop2.longitude), latLng.latitude, latLng.longitude, "M");
                 }
+
+                if (distance1 < distance2) {
+                    return -1
+                } else if (distance1 > distance2) {
+                    return 1;
+                } else {
+                    return stop1.name.localeCompare(stop2.name);
+                }
+
+                // if (state.favorites.includes(stop1.name) && !state.favorites.includes(stop2.name)) {
+                //     return -1;
+                // } else if (!state.favorites.includes(stop1.name) && state.favorites.includes(stop2.name)) {
+                //     return 1;
+                // } else {
+                //     if (distance1 < distance2) {
+                //         return -1
+                //     } else if (distance1 > distance2) {
+                //         return 1;
+                //     } else {
+                //         return stop1.name.localeCompare(stop2.name);
+                //     }
+                // }
             });
         },
         sortStopsFavoriteFirst(state) {
@@ -128,6 +137,10 @@ export default new Vuex.Store({
             } else {
                 state.favorites.push(name);
             }
+            localStorage.setItem("favorites", JSON.stringify(state.favorites));
+        },
+        updateFavorites(state, newFavorites) {
+            state.favorites = newFavorites;
             localStorage.setItem("favorites", JSON.stringify(state.favorites));
         }
     },

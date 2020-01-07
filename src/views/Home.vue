@@ -171,35 +171,27 @@
     },
     async created() {
       this.loading = true;
-      try {
-        await this.$store.dispatch("getStops");
-      } catch (e) {
-        this.snackbar_message = "Timed out. Check Internet connection.";
-        this.snackbar = true;
-      } finally {
-        this.loading = false
-      }
-
-      this.$store.commit("toggleFavorite", "");
-      this.$store.commit("sortStopsFavoriteFirst");
-
       if (this.$route.params.bus_stop_name !== undefined) {
         this.$store.commit('setAutocompleteSelected', this.$route.params.bus_stop_name);
       } else if (this.$route.params.service_name !== undefined) {
         this.$store.commit('setAutocompleteSelected', this.$route.params.service_name);
       }
 
-      try {
-        await this.$store.dispatch('getServices');
-        // for (const service of this.$store.state.services) {
-        //   await this.$store.dispatch("getPickupPoints", service.service_name);
-        //   await this.$store.dispatch("getCheckPoints", service.service_name);
-        // }
-        console.log("Finished loading checkpoints and pick-up points.")
-      } catch (e) {
-        this.snackbar_message = "Timed out. Check Internet connection.";
+      this.$store.dispatch("getStops")
+              .then(() => {
+                this.$store.commit("toggleFavorite", "");
+                this.$store.commit("sortStops", this.$store.state.current_location);
+              })
+              .catch(()=> {
+                this.snackbar_message = "Timed out. Check Internet connection.";
+                this.snackbar = true;
+              })
+              .finally(() => {this.loading = false});
+
+      this.$store.dispatch('getServices').catch(() => {
+        this.snackbar_message = "Failed to fetch bus services. Check Internet connection.";
         this.snackbar = true;
-      }
+      });
 
     },
     methods: {
@@ -244,7 +236,6 @@
       updateBusStopsByDistance: function () {
         this.locating = true;
         this.locate().then(() => {
-          this.$store.commit("sortStops", this.$store.state.current_location);
           this.locating = false;
           this.$router.push({
             name: 'bus-list',
@@ -289,6 +280,12 @@
           this.$store.commit('setAutocompleteSelected', this.$route.params.service_name);
           this.$store.commit("setServiceSelected", this.$route.params.service_name);
         }
+      },
+      "$store.state.favorites": function () {
+        this.$store.commit("sortStops", this.$store.state.current_location);
+      },
+      "$store.state.current_location": function (newVal) {
+        this.$store.commit("sortStops", newVal);
       }
     },
     computed: {

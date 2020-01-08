@@ -1,135 +1,136 @@
 <template>
     <div class="home">
         <v-app>
-            <div>
-                <v-toolbar
-                        color="teal"
-                        dark
+            <v-app-bar
+                    app
+                    color="teal"
+                    dark
+                    hide-on-scroll
+            >
+                <template v-slot:extension>
+                    <v-tabs
+                            background-color="transparent"
+                            fixed-tabs
+                            v-model="active_tab">
+
+                        <v-tab
+                                @click="
+                                            $router.push({
+                                            name: 'bus-list',
+                                            params: {bus_stop_name: $store.state.stop_selected}})"
+                        >
+                            <v-icon>mdi-bus-stop</v-icon>
+                        </v-tab>
+                        <v-tab
+                                @click="$router.push({
+                                            name: 'service-card',
+                                            params: {service_name: $store.state.service_selected}})"
+                        >
+                            <v-icon>mdi-map-search-outline</v-icon>
+                        </v-tab>
+                        <v-tab
+                                @click="$router.push({name: 'favorite-list'})"
+                        >
+                            <v-icon>
+                                mdi-heart-outline
+                            </v-icon>
+                        </v-tab>
+                    </v-tabs>
+                </template>
+                <v-autocomplete
+                        :items="autocomplete_items"
+                        auto-select-first
+                        chips
+                        class="mx-4"
+                        flat
+                        hide-details
+                        hide-selected
+                        item-text="search_field"
+                        item-value="name"
+                        label="Enter bus stop or service"
+                        ref="ac"
+                        solo-inverted
+                        v-model="$store.state.autocomplete_selected"
+                        v-on:input="selectFromAutocomplete"
                 >
-                    <template v-slot:extension>
-                        <v-tabs
-                                background-color="transparent"
-                                fixed-tabs
-                                v-model="active_tab">
 
-                            <v-tab
-                                    @click="
-              $router.push({
-                name: 'bus-list',
-                params: {bus_stop_name: $store.state.stop_selected}})"
-                            >
-                                <v-icon>mdi-bus-stop</v-icon>
-                            </v-tab>
-                            <v-tab
-                                    @click="$router.push({
-                name: 'service-card',
-                params: {service_name: $store.state.service_selected}})"
-                            >
-                                <v-icon>mdi-map-search-outline</v-icon>
-                            </v-tab>
-                            <v-tab
-                                    @click="$router.push({name: 'favorite-list'})"
-                            >
-                                <v-icon>
-                                    mdi-heart-outline
-                                </v-icon>
-                            </v-tab>
-                        </v-tabs>
+                    <template v-slot:no-data>
+                        <v-list-item>
+                            <v-list-item-title>
+                                Search for a <strong>Bus stop</strong> or <strong>Bus service</strong>
+                            </v-list-item-title>
+                        </v-list-item>
                     </template>
-                    <v-toolbar-title class="title mr-6 hidden-sm-and-down">BetterNextBus</v-toolbar-title>
-                    <v-autocomplete
-                            ref="ac"
-                            :items="autocomplete_items"
-                            auto-select-first
-                            chips
-                            class="mx-4"
-                            flat
-                            hide-details
-                            hide-selected
-                            item-text="search_field"
-                            item-value="name"
-                            label="Enter bus stop or service"
-                            solo-inverted
-                            v-model="$store.state.autocomplete_selected"
-                            v-on:input="selectFromAutocomplete"
-                    >
 
-                        <template v-slot:no-data>
-                            <v-list-item>
-                                <v-list-item-title>
-                                    Search for a <strong>Bus stop</strong> or <strong>Bus service</strong>
-                                </v-list-item-title>
-                            </v-list-item>
-                        </template>
+                    <template v-slot:selection="{ attr, item, selected }">
+                        <v-chip
+                                :input-value="selected"
+                                @click:close="$store.commit('setAutocompleteSelected', '')"
+                                class="white--text"
+                                close
+                                color="blue-grey"
+                                v-bind="attr"
+                        >
+                            <v-icon left>mdi-bus-stop</v-icon>
+                            <span v-text="item.type === 'stop' ? item.sub_title : item.title"></span>
+                        </v-chip>
+                    </template>
 
-                        <template v-slot:selection="{ attr, item, selected }">
-                            <v-chip
-                                    :input-value="selected"
-                                    @click:close="$store.commit('setAutocompleteSelected', '')"
-                                    class="white--text"
-                                    close
-                                    color="blue-grey"
-                                    v-bind="attr"
+                    <template v-slot:item="{ item }">
+                        <v-list-item-avatar
+                                class="headline font-weight-light white--text"
+                                color="indigo"
+                                v-if="item.type==='stop'"
+                        >
+                            {{ item.name.charAt(0) }}
+                        </v-list-item-avatar>
+                        <v-list-item-avatar
+                                class="font-weight-light white--text"
+                                color="orange"
+                                v-if="item.type==='service'"
+                        >
+                            {{ item.name.length > 4 ? item.name.charAt(0) : item.name }}
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                            <v-list-item-title v-text="item.title"></v-list-item-title>
+                            <v-list-item-subtitle v-text="item.sub_title"></v-list-item-subtitle>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                            <v-icon
+                                    color="red lighten-1"
+                                    v-if="$store.state.favorites.includes(item.name)"
                             >
-                                <v-icon left>mdi-bus-stop</v-icon>
-                                <span v-text="item.type === 'stop' ? item.sub_title : item.title"></span>
-                            </v-chip>
-                        </template>
-
-                        <template v-slot:item="{ item }">
-                            <v-list-item-avatar
-                                    class="headline font-weight-light white--text"
-                                    color="indigo"
-                                    v-if="item.type==='stop'"
-                            >
-                                {{ item.name.charAt(0) }}
-                            </v-list-item-avatar>
-                            <v-list-item-avatar
-                                    class="font-weight-light white--text"
-                                    color="orange"
-                                    v-if="item.type==='service'"
-                            >
-                                {{ item.name.length > 4 ? item.name.charAt(0) : item.name }}
-                            </v-list-item-avatar>
-                            <v-list-item-content>
-                                <v-list-item-title v-text="item.title"></v-list-item-title>
-                                <v-list-item-subtitle v-text="item.sub_title"></v-list-item-subtitle>
-                            </v-list-item-content>
-                            <v-list-item-action>
-                                <v-icon
-                                        color="red lighten-1"
-                                        v-if="$store.state.favorites.includes(item.name)"
-                                >
-                                    mdi-heart
-                                </v-icon>
-                                <v-icon v-else-if="item.type==='stop'">
-                                    mdi-bus-stop
-                                </v-icon>
-                                <v-icon v-else>
-                                    mdi-bus
-                                </v-icon>
-                            </v-list-item-action>
-                        </template>
-                    </v-autocomplete>
-                    <favorite-button
-                            :name="$store.state.autocomplete_selected"
-                            v-if="autocomplete_items.find(x => x.name === $store.state.autocomplete_selected) !== undefined &&
+                                mdi-heart
+                            </v-icon>
+                            <v-icon v-else-if="item.type==='stop'">
+                                mdi-bus-stop
+                            </v-icon>
+                            <v-icon v-else>
+                                mdi-bus
+                            </v-icon>
+                        </v-list-item-action>
+                    </template>
+                </v-autocomplete>
+                <favorite-button
+                        :name="$store.state.autocomplete_selected"
+                        v-if="autocomplete_items.find(x => x.name === $store.state.autocomplete_selected) !== undefined &&
                   autocomplete_items.find(x => x.name === $store.state.autocomplete_selected).type === 'stop'"
-                    ></favorite-button>
-                    <v-btn :disabled="locating"
-                           :loading="locating"
-                           @click="updateBusStopsByDistance"
-                           icon>
-                        <v-icon>mdi-crosshairs-gps</v-icon>
-                    </v-btn>
-                    <v-progress-linear
-                            :active="loading"
-                            :indeterminate="loading"
-                            absolute
-                            bottom
-                            color="white"
-                    />
-                </v-toolbar>
+                ></favorite-button>
+                <v-btn :disabled="locating"
+                       :loading="locating"
+                       @click="updateBusStopsByDistance"
+                       icon>
+                    <v-icon>mdi-crosshairs-gps</v-icon>
+                </v-btn>
+                <v-progress-linear
+                        :active="loading"
+                        :indeterminate="loading"
+                        absolute
+                        bottom
+                        color="white"
+                />
+            </v-app-bar>
+            <v-content class="fill-height">
                 <v-snackbar
                         color="error"
                         v-model="snackbar"
@@ -143,17 +144,17 @@
                         Close
                     </v-btn>
                 </v-snackbar>
-            </div>
-            <announcement-box></announcement-box>
-            <keep-alive>
-                <router-view @onLoadingStateChange="setLoadingState"></router-view>
-            </keep-alive>
-            <v-container
-                    class="text-center pa-10"
-                    v-if="$route.path==='/'"
-            >
-                <div class="grey--text">To start, select a bus stop or service.</div>
-            </v-container>
+                <announcement-box></announcement-box>
+                <keep-alive>
+                    <router-view @onLoadingStateChange="setLoadingState"></router-view>
+                </keep-alive>
+                <v-container
+                        class="text-center pa-10"
+                        v-if="$route.path==='/'"
+                >
+                    <div class="grey--text">To start, select a bus stop or service.</div>
+                </v-container>
+            </v-content>
         </v-app>
     </div>
 </template>

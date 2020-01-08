@@ -34,11 +34,12 @@
                             class="grey lighten-3 py-4 text-center teal--text caption"
                             cols="12"
                     >
+                        <strong>NUSBuses</strong> <br>
                         Made with 💗 by
                         <a :href="github_url" style="color: teal" target="_blank">
                             <strong>@BetterNextBus</strong>
                         </a>
-                        <br> Copyright © 2019 - {{new Date().getFullYear()}}
+                        <br>Copyright © 2019 - {{new Date().getFullYear()}}
                     </v-col>
                 </v-row>
             </v-footer>
@@ -47,7 +48,6 @@
 </template>
 
 <script>
-    //    "material-design-icons-iconfont": "^5.0.1",
     import {GITHUB_URL} from "@/utils/config";
 
     export default {

@@ -4,6 +4,7 @@ handlers:
   - url: /(.*\..+)$
     static_files: dist/\1
     upload: dist/(.*\..+)$
+    expiration: 7d
     # catch all handler to index.html
   - url: /.*
     static_files: dist/index.html

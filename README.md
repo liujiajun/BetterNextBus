@@ -19,9 +19,10 @@
     you fast and reliable user experience.
 - **Web app** (No download needed!)
     - NUSBuses runs on your browser and is cross-platform.
-- **Delightful and easy-to-use user interface** (We understand your pain when you just 
-can't find what you need on NextBus app.)
+- **Delightful and easy-to-use user interface** (We understand your pain when you just can't find what you need on NextBus app.)
     -  We made our best effort to make NUSBuses powerful yet super intuitive.
+- **Care about you privacy**
+  - We never ask for any permission (GPS and so on) unless user click the service.
     
 ## Feedback
 We welcome bug reports and feature requests. Thank you for making NUSBuses better!

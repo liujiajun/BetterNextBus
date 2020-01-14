@@ -93,7 +93,7 @@
         async created() {
             this.timer = setInterval(() => {
                 this.updateBusTiming(false);
-            }, 30000);
+            }, 15000);
             this.updateBusTiming(true);
         },
         data() {

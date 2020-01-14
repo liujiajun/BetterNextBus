@@ -1,55 +1,61 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import About from '../views/About.vue'
-import ServiceList from '@/components/ServiceList'
-import BusList from '@/components/BusList'
-import ServiceCard from "@/components/ServiceCard";
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import BusList from "@/components/BusList";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: '/', name: 'home', component: Home,
-    children: [
-      {
-        path: 'stops',
-        name: 'bus-list',
-        component: BusList,
-        props: true,
+    {
+        path: "/", name: "home", component: Home,
         children: [
-          {
-            path: ':bus_stop_name',
-            name: 'bus-list',
-            component: BusList,
-            props: true
-          }
+            {
+                path: "stops",
+                name: "bus-list",
+                component: BusList,
+                props: true,
+                children: [
+                    {
+                        path: ":bus_stop_name",
+                        name: "bus-list",
+                        component: BusList,
+                        props: true
+                    }
+                ]
+            },
+            {
+                path: "services",
+                name: "service-list",
+                component: () => import("@/components/ServiceList"),
+                props: true,
+                children: [
+                    {
+                        path: ":service_name",
+                        name: "service-card",
+                        component: () => import("@/components/ServiceCard"),
+                        props: true
+                    }
+                ]
+            },
+            {
+                path: "favorites",
+                name: "favorite-list",
+                component: () => import("@/components/FavoriteList")
+            }
         ]
-      },
-      {
-        path: 'services',
-        name: 'service-list',
-        component: ServiceList,
-        props: true,
-        children: [
-          {
-            path: ':service_name',
-            name: 'service-card',
-            component: ServiceCard,
-            props: true
-          }
-        ]
-      }
-    ]
-  },
-  {
-    path: '/about',
-    component: About
-  }
+    },
+    {
+        path: "/about",
+        component: () => import("../views/About.vue")
+    }
 ];
 
 const router = new VueRouter({
-  routes: routes,
+    routes: routes,
+    mode: "history",
+    scrollBehavior() {
+        return {x: 0, y: 0};
+    }
 });
 
-export default router
+export default router;

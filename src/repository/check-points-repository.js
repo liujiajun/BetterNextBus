@@ -1,4 +1,4 @@
-import repository from "./repository"
+import repository from "./repository";
 
 const RESOURCE = "/CheckPoint?route_code=";
 
@@ -10,8 +10,8 @@ export default {
             checkPoints.push({
                 lat: point["latitude"],
                 lng: point["longitude"]
-            })
+            });
         });
-        return checkPoints
+        return checkPoints;
     }
-}
+};

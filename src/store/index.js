@@ -15,7 +15,8 @@ export default new Vuex.Store({
         stop_selected: "UTown",
         service_selected: "A1",
         current_location: null,
-        favorites: []
+        favorites: [],
+        enable_analytics: true
     },
     mutations: {
         getAnnouncements(state, data) {
@@ -128,6 +129,17 @@ export default new Vuex.Store({
         updateFavorites(state, newFavorites) {
             state.favorites = newFavorites;
             localStorage.setItem("favorites", JSON.stringify(state.favorites));
+        },
+        initializeSettings(state) {
+            if (localStorage.getItem("analytics") === null) {
+                localStorage.setItem("analytics", JSON.stringify(state.enable_analytics));
+            } else {
+                state.enable_analytics = JSON.parse(localStorage.getItem("analytics"));
+            }
+        },
+        enableAnalytics(state, enable) {
+            localStorage.setItem("analytics", enable);
+            state.enable_analytics = enable;
         }
     },
     actions: {

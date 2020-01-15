@@ -26,6 +26,14 @@
                             class="my-2"
                             color="teal"
                             text
+                            to="/settings"
+                    >
+                        Settings
+                    </v-btn>
+                    <v-btn
+                            class="my-2"
+                            color="teal"
+                            text
                             to="/about"
                     >
                         About
@@ -55,6 +63,14 @@
             return {
                 github_url: GITHUB_URL
             };
+        },
+        mounted() {
+            this.$store.commit("initializeSettings");
+            if (this.$store.state.enable_analytics) {
+                this.$ga.enable();
+            } else {
+                this.$ga.disable();
+            }
         }
     };
 </script>

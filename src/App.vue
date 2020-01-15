@@ -66,7 +66,7 @@
         },
         mounted() {
             this.$store.commit("initializeSettings");
-            if (this.$store.state.enable_analytics) {
+            if (this.$store.state.enable_analytics === true) {
                 this.$ga.enable();
             } else {
                 this.$ga.disable();

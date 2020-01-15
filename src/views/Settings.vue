@@ -5,14 +5,17 @@
             <v-divider></v-divider>
             <v-card flat>
                 <v-card-title class="title teal--text">Privacy</v-card-title>
-                <v-card-text>We collect anonymous, aggregated usage information using Google Analytics.
+                <v-card-text>We take your privacy seriously. We collect anonymous, aggregated usage information using
+                             Google Analytics.
+                             This enables NUSBuses to provide you a better experience.
+                             We do not share your information with anybody.
                              You can opt-out anytime.
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn-toggle color="teal" group mandatory v-model="analytics">
                         <v-btn height="40" value="allow" width="85">
-                            Allow
+                            I'm in
                         </v-btn>
                         <v-btn height="40" value="opt-out" width="85">
                             Opt-out

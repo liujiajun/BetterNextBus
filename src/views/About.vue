@@ -49,6 +49,15 @@
                                 >
                                     <v-icon color="#3b5998" large>mdi-facebook</v-icon>
                                 </v-btn>
+                                
+                                <v-btn :href="facebook_url"
+                                       fab
+                                       large
+                                       target="_blank"
+                                       text
+                                >
+                                    <v-icon large>mdi-facebook</v-icon>
+                                </v-btn>
                             </v-row>
                         </div>
                         <div class="contribute">

@@ -39,6 +39,15 @@
                                 >
                                     <v-icon large>mdi-email</v-icon>
                                 </v-btn>
+                                
+                                <v-btn :href="facebook_url"
+                                       fab
+                                       large
+                                       target="_blank"
+                                       text
+                                >
+                                    <v-icon large>mdi-facebook</v-icon>
+                                </v-btn>
                             </v-row>
                         </div>
                         <div class="contribute">
@@ -65,13 +74,14 @@
 </template>
 
 <script>
-    import {EMAIL_ENCODED, GITHUB_URL} from "@/utils/config";
+    import {EMAIL_ENCODED, GITHUB_URL, FACEBOOK_URL} from "@/utils/config";
 
     export default {
         data() {
             return {
                 github_url: GITHUB_URL,
-                email_decoded: atob(EMAIL_ENCODED)
+                email_decoded: atob(EMAIL_ENCODED),
+                facebook_url: FACEBOOK_URL
             };
         }
     };

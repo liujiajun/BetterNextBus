@@ -5,9 +5,10 @@
             <v-divider></v-divider>
             <v-card flat>
                 <v-card-title class="title teal--text">Privacy</v-card-title>
-                <v-card-text>We take your privacy seriously. We collect anonymous, aggregated usage information using
+                <v-card-text>We take your privacy seriously.
+                             To provide you a better experience,
+                             we collect anonymous, aggregated usage information using
                              Google Analytics.
-                             This enables NUSBuses to provide you a better experience.
                              We do not share your information with anybody.
                              You can opt-out anytime.
                 </v-card-text>

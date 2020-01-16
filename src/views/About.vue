@@ -23,7 +23,8 @@
                             <v-card-title class="subtitle justify-center teal--text">Give Us Feedback</v-card-title>
                             <v-card-text class="text-center">NUSBuses is in testing phase. We value your feedback
                                                              including bug report, feature request.
-                                                             You can contact us through Github issues or email.
+                                                             You can contact us through Github issues, email, or
+                                                             Facebook.
                             </v-card-text>
                             <v-row justify="center">
                                 <v-btn :href="github_url + '/issues'"
@@ -37,7 +38,16 @@
                                 <v-btn :href="'mailto:' + email_decoded" fab large
                                        text
                                 >
-                                    <v-icon large>mdi-email</v-icon>
+                                    <v-icon color="#D44638" large>mdi-email</v-icon>
+                                </v-btn>
+                                
+                                <v-btn :href="facebook_url"
+                                       fab
+                                       large
+                                       target="_blank"
+                                       text
+                                >
+                                    <v-icon color="#3b5998" large>mdi-facebook</v-icon>
                                 </v-btn>
                                 
                                 <v-btn :href="facebook_url"
@@ -74,7 +84,7 @@
 </template>
 
 <script>
-    import {EMAIL_ENCODED, GITHUB_URL, FACEBOOK_URL} from "@/utils/config";
+    import {EMAIL_ENCODED, FACEBOOK_URL, GITHUB_URL} from "@/utils/config";
 
     export default {
         data() {

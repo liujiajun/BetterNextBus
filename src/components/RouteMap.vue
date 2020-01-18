@@ -68,7 +68,7 @@
                 this.google = await gmapsInit();
                 const element = document.getElementById(this.mapName).getElementsByClassName("route-map")[0];
                 const options = {
-                    zoom: 17,
+                    zoom: 15,
                     center: new this.google.maps.LatLng(1.29199190036396, 103.78027611345),
                     disableDefaultUI: true,
                     fullscreenControl: true

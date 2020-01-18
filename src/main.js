@@ -4,13 +4,13 @@ import vuetify from "./plugins/vuetify";
 import router from "./router";
 import store from "./store";
 import VueAnalytics from "vue-analytics";
+import {GOOGLE_ANALYTICS_ID, HOST_URL} from "./utils/config";
 
 Vue.config.productionTip = true;
-Vue.prototype.$hostname = (Vue.config.productionTip) ? "https://better-nextbus.appspot.com/" : "http://127.0.0.1:5000/";
+Vue.prototype.$hostname = (Vue.config.productionTip) ? HOST_URL : "http://127.0.0.1:5000/";
 
-// Configuration VueAnalytics
 Vue.use(VueAnalytics, {
-    id: "UA-155726050-1",
+    id: GOOGLE_ANALYTICS_ID,
     router
 });
 

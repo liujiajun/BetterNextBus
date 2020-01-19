@@ -70,9 +70,9 @@
                         Close
                     </v-btn>
                 </v-snackbar>
-                <announcement-box></announcement-box>
+                <announcement-box/>
                 <keep-alive>
-                    <router-view @onLoadingStateChange="setLoadingState"></router-view>
+                    <router-view @onLoadingStateChange="setLoadingState"/>
                 </keep-alive>
                 <v-container
                         class="text-center pa-10"
@@ -103,8 +103,10 @@
             this.loading = true;
             if (this.$route.params.bus_stop_name !== undefined) {
                 this.$store.commit("setAutocompleteSelected", this.$route.params.bus_stop_name);
+                this.$store.commit("setStopSelected", this.$route.params.bus_stop_name);
             } else if (this.$route.params.service_name !== undefined) {
                 this.$store.commit("setAutocompleteSelected", this.$route.params.service_name);
+                this.$store.commit("setServiceSelected", this.$route.params.service_name);
             }
 
             this.$store.dispatch("getStops")

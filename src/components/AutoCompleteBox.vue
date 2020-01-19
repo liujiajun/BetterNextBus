@@ -35,7 +35,7 @@
                         v-bind="attr"
                 >
                     <v-icon left>mdi-bus-stop</v-icon>
-                    <span v-text="item.type === 'stop' ? item.sub_title : item.title"></span>
+                    <span v-text="item.type === 'stop' ? item.sub_title : item.title"/>
                 </v-chip>
             </template>
 
@@ -45,7 +45,7 @@
                         color="indigo"
                         v-if="item.type==='stop'"
                 >
-                    {{ item.name.charAt(0) }}
+                    {{ item.title.charAt(0) }}
                 </v-list-item-avatar>
                 <v-list-item-avatar
                         class="font-weight-light white--text"

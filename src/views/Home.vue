@@ -139,26 +139,26 @@
                     this.loading = false;
                 });
 
-            // this.$store.dispatch("getServices").catch((e) => {
-            //     console.log(e)
-            //     this.snackbar_message = "Failed to fetch bus services. Check Internet connection.";
-            //     this.snackbar = true;
-            // });
-
-            //Emergency fix
-            await this.$store.dispatch("getServices");
-            try {
-                for (const service of this.$store.state.services) {
-                    this.$store.dispatch("getPickupPoints", service.service_name);
-                    this.$store.dispatch("getCheckPoints", service.service_name);
-                }
-                console.log("Finished loading checkpoints and pick-up points.");
-            } catch (e) {
+            this.$store.dispatch("getServices").catch((e) => {
                 console.log(e);
-                this.snackbar_message = "Timed out. Check Internet connection.";
+                this.snackbar_message = "Failed to fetch bus services. Check Internet connection.";
                 this.snackbar = true;
-            }
-            //End of emergency fix
+            });
+
+            // //Emergency fix
+            // await this.$store.dispatch("getServices");
+            // try {
+            //     for (const service of this.$store.state.services) {
+            //         this.$store.dispatch("getPickupPoints", service.service_name);
+            //         this.$store.dispatch("getCheckPoints", service.service_name);
+            //     }
+            //     console.log("Finished loading checkpoints and pick-up points.");
+            // } catch (e) {
+            //     console.log(e);
+            //     this.snackbar_message = "Timed out. Check Internet connection.";
+            //     this.snackbar = true;
+            // }
+            // //End of emergency fix
 
         },
         methods: {

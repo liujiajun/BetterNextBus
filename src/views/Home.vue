@@ -70,6 +70,23 @@
                         Close
                     </v-btn>
                 </v-snackbar>
+                <v-container
+                        class="pb-0"
+                >
+                    <v-alert
+                            color="red"
+                            text
+                    >
+                        <v-row align="center">
+                            <v-col class="grow">
+                                <div class="body-2 font-weight-bold">Sorry. We're down! 😭</div>
+                                <div class="body-2">We're working around the clock to bring you a fix. Thanks for your
+                                                    love and support!
+                                </div>
+                            </v-col>
+                        </v-row>
+                    </v-alert>
+                </v-container>
                 <announcement-box/>
                 <keep-alive>
                     <router-view @onLoadingStateChange="setLoadingState"/>
@@ -122,10 +139,26 @@
                     this.loading = false;
                 });
 
-            this.$store.dispatch("getServices").catch(() => {
-                this.snackbar_message = "Failed to fetch bus services. Check Internet connection.";
+            // this.$store.dispatch("getServices").catch((e) => {
+            //     console.log(e)
+            //     this.snackbar_message = "Failed to fetch bus services. Check Internet connection.";
+            //     this.snackbar = true;
+            // });
+
+            //Emergency fix
+            await this.$store.dispatch("getServices");
+            try {
+                for (const service of this.$store.state.services) {
+                    this.$store.dispatch("getPickupPoints", service.service_name);
+                    this.$store.dispatch("getCheckPoints", service.service_name);
+                }
+                console.log("Finished loading checkpoints and pick-up points.");
+            } catch (e) {
+                console.log(e);
+                this.snackbar_message = "Timed out. Check Internet connection.";
                 this.snackbar = true;
-            });
+            }
+            //End of emergency fix
 
         },
         methods: {

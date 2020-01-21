@@ -6,11 +6,22 @@
         >
             <v-card-title class="title pt-2">
                 {{stop.short_name}}
-                <favorite-button :name="stop_name"></favorite-button>
-                <v-spacer></v-spacer>
-                <v-btn class="drag-handle" icon>
-                    <v-icon>mdi-drag-horizontal</v-icon>
-                </v-btn>
+                <favorite-button :name="stop_name"/>
+                <v-spacer/>
+                <v-tooltip bottom
+                           close-delay="1500"
+                           v-model="showToolTip"
+                >
+                    <template v-slot:activator="{ on }">
+                        <v-btn @click="showToolTip=!showToolTip"
+                               class="drag-handle"
+                               icon
+                        >
+                            <v-icon>mdi-drag-horizontal</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Drag to change order</span>
+                </v-tooltip>
             </v-card-title>
             <v-card-subtitle class="caption pb-1 mb-1">{{stop.long_name}}</v-card-subtitle>
             <v-container
@@ -66,7 +77,8 @@
             return {
                 service_timings: [],
                 timer: "",
-                loading: true
+                loading: true,
+                showToolTip: false
             };
         },
         method: {
@@ -86,12 +98,18 @@
                 if (found !== undefined)
                     return found;
                 return {long_name: ""};
-            }
+            },
         },
         async mounted() {
             this.timer = setInterval(this.updateServiceTiming, 30000);
             this.service_timings = await RepositoryFactory.get("serviceTimingAtBusStop").get(this.stop_name);
             this.loading = false;
+        },
+        watch: {
+            "moving": function (oldVal, newVal) {
+                if (oldVal && !newVal)
+                    this.showToolTip = false;
+            }
         },
         beforeDestroy() {
             clearInterval(this.timer);

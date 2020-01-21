@@ -102,6 +102,7 @@
         async created() {
             this.loading = true;
             if (this.$route.params.bus_stop_name !== undefined) {
+                this.loading = true;
                 this.$store.commit("setAutocompleteSelected", this.$route.params.bus_stop_name);
                 this.$store.commit("setStopSelected", this.$route.params.bus_stop_name);
             } else if (this.$route.params.service_name !== undefined) {

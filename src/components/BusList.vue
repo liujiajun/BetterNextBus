@@ -55,7 +55,7 @@
                         </v-expand-transition>
                         <v-card-actions class="teal darken-1 text--primary">
                             <v-btn
-                                    @click="gotoService(service_timings[i].service_name)"
+                                    @click="gotoService(getTitle(service_timings[i].service_name))"
                                     icon
                             >
                                 <v-icon color="white">mdi-map-search-outline</v-icon>

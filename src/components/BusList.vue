@@ -11,7 +11,7 @@
             >
                 <v-row align="center">
                     <v-col class="grow">
-                        <div class="body-2 font-weight-bold">Bus arrival times not available for {{bus_stop_name}}</div>
+                        <div class="body-2 font-weight-bold">Bus arrival times not available for this stop.</div>
                         <div class="body-2">The official NUS NextBus server is down. As a result, we could not provide
                                             you with real-time
                                             bus service times.

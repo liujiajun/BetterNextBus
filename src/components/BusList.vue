@@ -1,6 +1,26 @@
 <template>
     <div id="bus-list">
         <v-container
+                class="pb-0"
+        >
+            <v-alert
+                    color="red"
+                    dismissible
+                    text
+                    v-if="service_timings.length===0"
+            >
+                <v-row align="center">
+                    <v-col class="grow">
+                        <div class="body-2 font-weight-bold">Bus arrival times not available for {{bus_stop_name}}</div>
+                        <div class="body-2">The official NUS NextBus server is down. As a result, we could not provide
+                                            you with real-time
+                                            bus service times.
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-alert>
+        </v-container>
+        <v-container
                 class="pt-0 mt-0">
             <v-slide-y-transition
                     group

@@ -31,7 +31,7 @@
                         @click:close="$store.commit('setAutocompleteSelected', '')"
                         class="white--text"
                         close
-                        color="grey"
+                        color="blue-grey"
                         v-bind="attr"
                 >
                     <v-icon left>{{item.type === "stop" ? "mdi-bus-stop" : "mdi-bus"}}</v-icon>

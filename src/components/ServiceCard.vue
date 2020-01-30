@@ -1,56 +1,93 @@
 <template>
     <div id="service-card">
-        <v-card class="transparent" flat>
-            <v-timeline
-                    dense
+        <v-subheader>
+            Route
+            <v-btn
+                    @click="showRoute = !showRoute"
+                    icon
+                    small
             >
-                <v-timeline-item
-                        :color="(i===0 || i===service.pickup_points.length-1) ? 'orange' : 'blue'"
-                        :key="i"
-                        small
-                        v-for="(pickupPoint, i) in service.pickup_points"
+                <v-icon>
+                    {{ showRoute? "mdi-chevron-up" : "mdi-chevron-down" }}
+                </v-icon>
+            </v-btn>
+        </v-subheader>
+        <v-expand-transition>
+            <v-card class="transparent" flat v-if="showRoute">
+                <v-timeline
+                        dense
                 >
-                    <v-row class="pt-1">
-                        <v-col>
-                            <div>
-                                {{getStop(pickupPoint.name).short_name}}
-                                <v-chip
-                                        class="white--text ml-0"
-                                        color="green darken-2"
-                                        label
-                                        small
-                                        v-if="getStop(pickupPoint.name).name===nearest_stop_name"
+                    <v-timeline-item
+                            :color="(i===0 || i===service.pickup_points.length-1) ? 'orange' : 'blue'"
+                            :key="i"
+                            small
+                            v-for="(pickupPoint, i) in service.pickup_points"
+                    >
+                        <v-row class="pt-1">
+                            <v-col>
+                                <div>
+                                    {{getStop(pickupPoint.name).short_name}}
+                                    <v-chip
+                                            class="white--text ml-0"
+                                            color="green darken-2"
+                                            label
+                                            small
+                                            v-if="getStop(pickupPoint.name).name===nearest_stop_name"
+                                    >
+                                        Nearest
+                                    </v-chip>
+                                </div>
+                                <div class="caption">{{getStop(pickupPoint.name).long_name}}</div>
+                            </v-col>
+                            <v-col class="pr-6" cols="1">
+                                <favorite-button :name="pickupPoint.name"></favorite-button>
+                            </v-col>
+                            <v-col class="pr-12 text-left" cols="3">
+                                <v-btn
+                                        @click="gotoStop(pickupPoint.name)"
+                                        icon
                                 >
-                                    Nearest
-                                </v-chip>
-                            </div>
-                            <div class="caption">{{getStop(pickupPoint.name).long_name}}</div>
-                        </v-col>
-                        <v-col class="pr-2 mr-2" cols="1">
-                            <favorite-button :name="pickupPoint.name"></favorite-button>
-                        </v-col>
-                        <v-col class="pr-1 mr-3" cols="2">
-                            <v-btn
-                                    @click="gotoStop(pickupPoint.name)"
-                                    icon
-                            >
-                                <v-icon>mdi-bus-stop</v-icon>
-                            </v-btn>
-                        </v-col>
-                    </v-row>
+                                    <v-icon>mdi-bus-stop</v-icon>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
 
-                </v-timeline-item>
-            </v-timeline>
-        </v-card>
+                    </v-timeline-item>
+                </v-timeline>
+            </v-card>
+
+        </v-expand-transition>
+        <v-subheader>
+            Info
+            <v-btn
+                    @click="showInfo = !showInfo"
+                    icon
+                    small
+            >
+                <v-icon>
+                    {{ showInfo? "mdi-chevron-up" : "mdi-chevron-down" }}
+                </v-icon>
+            </v-btn>
+        </v-subheader>
+        <v-expand-transition>
+            <ServiceInfoBox :serviceName="$store.state.service_selected" v-if="showInfo"></ServiceInfoBox>
+        </v-expand-transition>
     </div>
 </template>
 
 <script>
     import FavoriteButton from "@/components/FavoriteButton";
+    import ServiceInfoBox from "@/components/ServiceInfoBox";
 
     export default {
         name: "service-card",
-        components: {FavoriteButton},
+        components: {ServiceInfoBox, FavoriteButton},
+        data() {
+            return {
+                showRoute: true,
+                showInfo: false
+            };
+        },
         methods: {
             getStop(name) {
                 if (this.$store.state.stops.find(x => x.name === name) === undefined)

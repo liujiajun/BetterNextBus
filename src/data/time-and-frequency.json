@@ -1,0 +1,197 @@
+{
+  "A1": {
+    "weekday": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sat": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sun-and-ph": {
+      "first": "09:00",
+      "last": "23:00"
+    },
+    "remarks": null
+  },
+  "A2": {
+    "weekday": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sat": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sun-and-ph": {
+      "first": "09:00",
+      "last": "23:00"
+    },
+    "remarks": null
+  },
+  "B1": {
+    "weekday": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sat": {
+      "first": "-",
+      "last": "-"
+    },
+    "sun-and-ph": {
+      "first": "09:00",
+      "last": "23:00"
+    },
+    "remarks": null
+  },
+  "B2": {
+    "weekday": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sat": {
+      "first": "07:30",
+      "last": "17:00"
+    },
+    "sun-and-ph": {
+      "first": "-",
+      "last": "-"
+    },
+    "remarks": null
+  },
+  "C": {
+    "weekday": {
+      "first": "07:20",
+      "last": "23:00"
+    },
+    "sat": {
+      "first": "07:40",
+      "last": "17:00"
+    },
+    "sun-and-ph": {
+      "first": "-",
+      "last": "-"
+    },
+    "remarks": null
+  },
+  "D1": {
+    "weekday": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sat": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sun-and-ph": {
+      "first": "09:15",
+      "last": "23:00"
+    },
+    "remarks": null
+  },
+  "D2": {
+    "weekday": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sat": {
+      "first": "07:15",
+      "last": "23:00"
+    },
+    "sun-and-ph": {
+      "first": "09:15",
+      "last": "23:00"
+    },
+    "remarks": null
+  },
+  "BTC1": {
+    "weekday": {
+      "first": "07:20",
+      "last": "21:30"
+    },
+    "sat": {
+      "first": "08:30",
+      "last": "12:30"
+    },
+    "sun-and-ph": {
+      "first": "-",
+      "last": "-"
+    },
+    "remarks": null
+  },
+  "BTC2": {
+    "weekday": {
+      "first": "07:20",
+      "last": "21:30"
+    },
+    "sat": {
+      "first": "08:30",
+      "last": "12:30"
+    },
+    "sun-and-ph": {
+      "first": "-",
+      "last": "-"
+    },
+    "remarks": "For the last two (2) return trips from BTC at 9.40pm & 10.00pm, ISB BTC2 will ply via PGP, Business Link, Kent Ridge Drive and Kent Ridge Crescent back to EA."
+  },
+  "A1E": {
+    "weekday": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "sat": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "sun-and-ph": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "remarks": null
+  },
+  "A2E": {
+    "weekday": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "sat": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "sun-and-ph": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "remarks": null
+  },
+  "AV1": {
+    "weekday": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "sat": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "sun-and-ph": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "remarks": null
+  },
+  "AV2": {
+    "weekday": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "sat": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "sun-and-ph": {
+      "first": "No data",
+      "last": "No data"
+    },
+    "remarks": null
+  }
+}

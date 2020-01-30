@@ -19,8 +19,15 @@
 </template>
 
 <script>
+    import timeAndFrequency from "../data/time-and-frequency";
+
     export default {
         name: "service-list",
+        created() {
+            if (this.$store.state.time_and_frequency.length === 0) {
+                this.$store.commit("getTimeAndFrequency", timeAndFrequency);
+            }
+        },
         methods: {
             selectTab(name) {
                 this.$router.push({

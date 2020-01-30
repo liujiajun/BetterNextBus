@@ -16,7 +16,8 @@ export default new Vuex.Store({
         service_selected: "A1",
         current_location: null,
         favorites: [],
-        enable_analytics: true
+        enable_analytics: true,
+        time_and_frequency: []
     },
     mutations: {
         getAnnouncements(state, data) {
@@ -84,6 +85,9 @@ export default new Vuex.Store({
         },
         getServices(state, data) {
             state.services = data;
+        },
+        getTimeAndFrequency(state, data) {
+            state.time_and_frequency = data;
         },
         addCheckPoints(state, data) {
             state.services

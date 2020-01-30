@@ -67,7 +67,8 @@
                                     text
                             >
                                 LIVE MAP
-                                <v-icon>{{ service_timings[i].show_map ? "mdi-chevron-up" : "mdi-chevron-down" }}
+                                <v-icon>
+                                    {{ service_timings[i].show_map ? "mdi-chevron-up" : "mdi-chevron-down" }}
                                 </v-icon>
                             </v-btn>
                         </v-card-actions>

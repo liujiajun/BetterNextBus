@@ -2,7 +2,7 @@
     <div>
         <v-card class="transparent" flat>
             <v-list-item>
-                <v-list-item-title>First bus:</v-list-item-title>
+                <v-list-item-title>First bus</v-list-item-title>
                 <v-tooltip top>
                     <template v-slot:activator="{ on }">
                         <v-list-item-title class="text-right font-weight-bold" v-on="on">{{firstBusToday}}
@@ -12,7 +12,7 @@
                 </v-tooltip>
             </v-list-item>
             <v-list-item>
-                <v-list-item-title>Last bus:</v-list-item-title>
+                <v-list-item-title>Last bus</v-list-item-title>
                 <v-tooltip top>
                     <template v-slot:activator="{ on }">
                         <v-list-item-title class="text-right font-weight-bold" v-on="on">{{lastBusToday}}
@@ -20,6 +20,9 @@
                     </template>
                     <ServiceInfoTooltip :serviceName="serviceName"/>
                 </v-tooltip>
+            </v-list-item>
+            <v-list-item>
+                <v-list-item-title class="caption text-right grey--text">Pro-tip: tap the times for more info.</v-list-item-title>
             </v-list-item>
         </v-card>
     </div>

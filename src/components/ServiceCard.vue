@@ -1,16 +1,12 @@
 <template>
     <div id="service-card">
-        <v-subheader>
+        <v-subheader
+                @click="showRoute = !showRoute"
+                class="pl-2">
+            <v-icon>
+                {{ showRoute? "mdi-chevron-up" : "mdi-chevron-down" }}
+            </v-icon>
             Route
-            <v-btn
-                    @click="showRoute = !showRoute"
-                    icon
-                    small
-            >
-                <v-icon>
-                    {{ showRoute? "mdi-chevron-up" : "mdi-chevron-down" }}
-                </v-icon>
-            </v-btn>
         </v-subheader>
         <v-expand-transition>
             <v-card class="transparent" flat v-if="showRoute">
@@ -57,17 +53,12 @@
             </v-card>
 
         </v-expand-transition>
-        <v-subheader>
+        <v-subheader @click="showInfo = !showInfo"
+                class="pl-2">
+            <v-icon>
+                {{ showInfo? "mdi-chevron-up" : "mdi-chevron-down" }}
+            </v-icon>
             Info
-            <v-btn
-                    @click="showInfo = !showInfo"
-                    icon
-                    small
-            >
-                <v-icon>
-                    {{ showInfo? "mdi-chevron-up" : "mdi-chevron-down" }}
-                </v-icon>
-            </v-btn>
         </v-subheader>
         <v-expand-transition>
             <ServiceInfoBox :serviceName="$store.state.service_selected" v-if="showInfo"></ServiceInfoBox>

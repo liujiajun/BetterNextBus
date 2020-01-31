@@ -75,6 +75,7 @@
                     </v-card>
                 </v-col>
             </v-slide-y-transition>
+            <div class="text-center caption grey--text">Last update: {{since_last_update}} seconds ago</div>
         </v-container>
     </div>
 </template>
@@ -95,18 +96,23 @@
             this.timer = setInterval(() => {
                 this.updateBusTiming(false);
             }, 15000);
+            setInterval(this.updateSinceLastUpdate, 500);
             this.updateBusTiming(true);
         },
         data() {
             return {
                 service_timings: [],
-                timer: "",
+                timer: null,
+                last_update: null,
+                since_last_update: null
             };
         },
         methods: {
+            updateSinceLastUpdate() {
+                this.since_last_update = Math.ceil(((new Date()).getTime() - this.last_update) / 1000);
+            },
             async updateBusTiming(refresh) {
                 if (this.bus_stop_name === "" || this.bus_stop_name === null || this.bus_stop_name === undefined) return;
-
                 if (refresh) {
                     this.$emit("onLoadingStateChange", true);
                     try {
@@ -123,6 +129,7 @@
                         if (found === undefined || found === null) return;
                         found.arrival_time = service.arrival_time;
                         found.next_arrival_time = service.next_arrival_time;
+                        this.last_update = new Date().getTime();
                     });
                 } catch (e) {
                     this.$emit("onLoadingStateChange", false);

@@ -39,11 +39,26 @@
                         About
                     </v-btn>
                     <v-col
-                            class="grey lighten-3 py-4 text-center teal--text caption"
+                            class="grey lighten-3 py-4 pt-0 text-center teal--text caption"
                             cols="12"
                     >
                         <strong>NUSBuses</strong> <br>
-                        Made with 💗 by
+                        <span class="withLove">Made with</span>
+                        <svg class="heart" viewBox="0 0 200 200">
+                            <g transform="translate(100 100)">
+                                <path d="M92.71,7.27L92.71,7.27c-9.71-9.69-25.46-9.69-35.18,0L50,14.79l-7.54-7.52C32.75-2.42,17-2.42,7.29,7.27v0 c-9.71,9.69-9.71,25.41,0,35.1L50,85l42.71-42.63C102.43,32.68,102.43,16.96,92.71,7.27z" fill="tomato"
+                                      transform="translate(-50 -50)"/>
+                                <animateTransform
+                                        additive="sum"
+                                        attributeName="transform"
+                                        dur="1.5s"
+                                        repeatCount="indefinite"
+                                        type="scale"
+                                        values="1; 1.5; 1.25; 1.5; 1.5; 1;">
+                                </animateTransform>
+                            </g>
+                        </svg>
+                        by
                         <a :href="github_url" style="color: teal" target="_blank">
                             <strong>@BetterNextBus</strong>
                         </a>
@@ -75,5 +90,14 @@
     };
 </script>
 <style>
+    .heart {
+        width: 24px;
+        height: 24px;
+    }
 
+    .heart,
+    .withLove {
+        vertical-align: middle;
+        display: inline-block;
+    }
 </style>

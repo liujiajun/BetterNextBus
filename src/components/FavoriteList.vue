@@ -27,7 +27,12 @@
                 class="text-center pa-10"
                 v-else
         >
-            <div class="grey--text">Your favorite bus stops will be displayed here.</div>
+            <v-img
+                    contain
+                    height="150"
+                    src="../assets/heart.svg"
+            />
+            <div class="subtitle grey--text pt-3">Your favorite bus stops will be displayed here.</div>
         </v-container>
     </div>
 </template>

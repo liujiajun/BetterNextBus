@@ -78,7 +78,14 @@
                         class="text-center pa-10"
                         v-if="$route.path==='/'"
                 >
-                    <div class="grey--text">To start, select a bus stop or service.</div>
+                    <v-img
+                            contain
+                            height="250"
+                            src="../assets/logo.svg"
+                    >
+                    </v-img>
+                    <div class="title justify-center teal--text">Welcome to NUSBuses!</div>
+                    <div class="subtitle grey--text">To start, select a bus stop or service.</div>
                 </v-container>
             </v-content>
         </v-app>

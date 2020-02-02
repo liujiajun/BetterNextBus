@@ -75,7 +75,7 @@
                     </v-card>
                 </v-col>
             </v-slide-y-transition>
-            <div class="text-center caption grey--text">Last update: {{since_last_update}} {{since_last_update === 1 ? 'second' : 'seconds'}} ago</div>
+            <div class="text-center caption grey--text" v-if="last_update!=null">Last updated {{since_last_update}} {{since_last_update === 1 ? 'second' : 'seconds'}} ago</div>
         </v-container>
     </div>
 </template>

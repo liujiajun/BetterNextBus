@@ -119,7 +119,8 @@
                     this.$store.commit("toggleFavorite", "");
                     this.$store.commit("sortStops", this.$store.state.current_location);
                 })
-                .catch(() => {
+                .catch((e) => {
+                    console.log(e);
                     this.snackbar_message = "Timed out. Check Internet connection.";
                     this.snackbar = true;
                 })

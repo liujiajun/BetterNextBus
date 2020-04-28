@@ -1,12 +1,14 @@
-import repository from "./repository";
+//import repository from "./repository";
+import busStops from "../data/bus-stops";
 
-const RESOURCE = "/BusStops";
+//const RESOURCE = "/BusStops";
 
 export default {
     async get() {
-        let res = await repository.get(RESOURCE);
+        //let res = await repository.get(RESOURCE);
+        let res = busStops;
         let stops = [];
-        res.data["BusStopsResult"]["busstops"].forEach(stop => {
+        res["BusStopsResult"]["busstops"].forEach(stop => {
             stops.push({
                 name: stop["name"],
                 caption: stop["caption"],

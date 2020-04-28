@@ -35,8 +35,8 @@
                                 </div>
                                 <div class="caption">{{getStop(pickupPoint.name).long_name}}</div>
                             </v-col>
-                            <v-col class="text-right" cols="1">
-                                <favorite-button :name="pickupPoint.name"></favorite-button>
+                            <v-col class="text-right" cols="3">
+                                <favorite-button :name="pickupPoint.name" class="mr-2"></favorite-button>
                             </v-col>
                         </v-row>
 

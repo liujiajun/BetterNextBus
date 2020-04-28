@@ -20,7 +20,7 @@
                             v-for="(pickupPoint, i) in service.pickup_points"
                     >
                         <v-row class="pt-1">
-                            <v-col>
+                            <v-col @click="gotoStop(pickupPoint.name)">
                                 <div>
                                     {{getStop(pickupPoint.name).short_name}}
                                     <v-chip
@@ -35,16 +35,8 @@
                                 </div>
                                 <div class="caption">{{getStop(pickupPoint.name).long_name}}</div>
                             </v-col>
-                            <v-col class="pr-6" cols="1">
+                            <v-col class="text-right" cols="1">
                                 <favorite-button :name="pickupPoint.name"></favorite-button>
-                            </v-col>
-                            <v-col class="pr-12 text-left" cols="3">
-                                <v-btn
-                                        @click="gotoStop(pickupPoint.name)"
-                                        icon
-                                >
-                                    <v-icon>mdi-bus-stop</v-icon>
-                                </v-btn>
                             </v-col>
                         </v-row>
 

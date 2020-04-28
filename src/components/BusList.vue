@@ -2,6 +2,7 @@
     <div id="bus-list">
         <v-container
                 class="pt-0 mt-0">
+            <announcement-box class="mt-3"/>
             <v-slide-y-transition
                     group
             >
@@ -83,12 +84,16 @@
 <script>
     import {RepositoryFactory} from "@/repository/reposiotry-factory";
     import RouteMap from "@/components/RouteMap";
+    import AnnouncementBox from "@/components/AnnouncementBox";
 
     require("promise.prototype.finally").shim();
 
     export default {
         name: "bus-list",
-        components: {RouteMap},
+        components: {
+            RouteMap,
+            AnnouncementBox
+        },
         props: {
             bus_stop_name: String,
         },

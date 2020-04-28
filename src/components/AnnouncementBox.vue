@@ -7,6 +7,7 @@
                 dismissible
                 text
                 v-model="alert"
+                class="mb-2"
         >
             <v-row align="center">
                 <v-col class="grow">

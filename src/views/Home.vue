@@ -70,7 +70,6 @@
                         Close
                     </v-btn>
                 </v-snackbar>
-                <announcement-box/>
                 <keep-alive>
                     <router-view @onLoadingStateChange="setLoadingState"/>
                 </keep-alive>
@@ -93,7 +92,6 @@
 </template>
 
 <script>
-    import AnnouncementBox from "@/components/AnnouncementBox";
     import FavoriteButton from "@/components/FavoriteButton";
     import AutoCompleteBox from "@/components/AutoCompleteBox";
 
@@ -102,7 +100,6 @@
         components: {
             AutoCompleteBox,
             FavoriteButton,
-            AnnouncementBox
         },
         mounted() {
         },

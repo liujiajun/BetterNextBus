@@ -59,11 +59,12 @@
             <v-content class="fill-height">
                 <v-snackbar
                         color="error"
-                        v-model="snackbar"
+                        class="ma-3"
+                        v-model="$store.state.error"
                 >
-                    {{ snackbar_message }}
+                    {{ this.$store.state.error_message}}
                     <v-btn
-                            @click="snackbar = false"
+                            @click="$store.commit('toggleError', false)"
                             color="white"
                             text
                     >
@@ -121,8 +122,8 @@
                 })
                 .catch((e) => {
                     console.log(e);
-                    this.snackbar_message = "Timed out. Check Internet connection.";
-                    this.snackbar = true;
+                    this.$store.commit("setErrorMessage", "Timed out. Check Internet connection.");
+                    this.$store.commit("toggleError", true);
                 })
                 .finally(() => {
                     this.loading = false;

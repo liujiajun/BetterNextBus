@@ -17,7 +17,9 @@ export default new Vuex.Store({
         current_location: null,
         favorites: [],
         enable_analytics: true,
-        time_and_frequency: []
+        time_and_frequency: [],
+        error: false,
+        error_message: null
     },
     mutations: {
         getAnnouncements(state, data) {
@@ -144,6 +146,12 @@ export default new Vuex.Store({
         enableAnalytics(state, enable) {
             localStorage.setItem("analytics", enable);
             state.enable_analytics = enable;
+        },
+        toggleError(state, isError) {
+            state.error = isError;
+        },
+        setErrorMessage(state, message) {
+            state.error_message = message;
         }
     },
     actions: {

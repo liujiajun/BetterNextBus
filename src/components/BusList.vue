@@ -4,6 +4,7 @@
                 class="pt-0 mt-0">
             <announcement-box class="mt-3"/>
             <v-slide-y-transition
+                    class="mt-3"
                     group
             >
                 <v-col :cols="12"

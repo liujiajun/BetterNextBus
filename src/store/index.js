@@ -17,6 +17,7 @@ export default new Vuex.Store({
         current_location: null,
         favorites: [],
         enable_analytics: true,
+        enable_dark: 'true',
         time_and_frequency: [],
         error: false,
         error_message: null
@@ -142,10 +143,19 @@ export default new Vuex.Store({
             } else {
                 state.enable_analytics = JSON.parse(localStorage.getItem("analytics"));
             }
+            if (localStorage.getItem("dark") === null) {
+                localStorage.setItem("dark", state.enable_dark);
+            } else {
+                state.enable_dark = localStorage.getItem("dark");
+            }
         },
         enableAnalytics(state, enable) {
             localStorage.setItem("analytics", enable);
             state.enable_analytics = enable;
+        },
+        enableDark(state, enable) {
+            localStorage.setItem("dark", enable);
+            state.enable_dark = enable;
         },
         toggleError(state, isError) {
             state.error = isError;

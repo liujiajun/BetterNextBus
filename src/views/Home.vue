@@ -3,15 +3,17 @@
         <v-app>
             <v-app-bar
                     app
-                    color="teal"
                     dark
+                    :color="$vuetify.theme.dark ? '' : 'teal'"
                     hide-on-scroll
             >
                 <template v-slot:extension>
                     <v-tabs
                             background-color="transparent"
                             fixed-tabs
-                            v-model="active_tab">
+                            :color="$vuetify.theme.dark ? 'teal': ''"
+                            v-model="active_tab"
+                    >
 
                         <v-tab
                                 @click="
@@ -122,8 +124,6 @@
                 })
                 .catch((e) => {
                     console.log(e);
-                    this.$store.commit("setErrorMessage", "Timed out. Check Internet connection.");
-                    this.$store.commit("toggleError", true);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -131,8 +131,6 @@
 
             this.$store.dispatch("getServices").catch((e) => {
                 console.log(e);
-                this.snackbar_message = "Failed to fetch service routes and pick-up points. Check Internet connection.";
-                this.snackbar = true;
             });
 
         },
@@ -164,14 +162,12 @@
                     this.$store.commit("setCurrentLocation", location);
                 } catch (e) {
                     if (e.code === e.PERMISSION_DENIED) {
-                        this.snackbar_message = "Permission denied. Try enabling location service.";
-                    } else if (e.code === e.POSITION_UNAVAILABLE || e.code === e.TIMEOUT) {
-                        console.log(e);
-                        this.snackbar_message = "Geolocation not available at the moment. Try again later.";
+                        this.$store.commit("setErrorMessage", "Permission denied. Try enabling location service.");
+                        this.$store.commit("toggleError", true);
                     } else {
-                        this.snackbar_message = "Unknown error when getting geolocation.";
+                        this.$store.commit("setErrorMessage", "Geolocation not available at the moment. Try again later.");
+                        this.$store.commit("toggleError", true);
                     }
-                    this.snackbar = true;
                     this.locating = false;
                 }
             },
@@ -195,8 +191,6 @@
                 loading: false,
                 locating: false,
                 location: null,
-                snackbar: false,
-                snackbar_message: "",
             };
         },
         watch: {

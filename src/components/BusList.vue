@@ -1,8 +1,7 @@
 <template>
     <div id="bus-list">
-        <v-container
-                class="pt-0 mt-0">
-            <announcement-box class="mt-3"/>
+        <v-container class="pt-0 mt-3">
+            <announcement-box class=""/>
             <v-slide-y-transition
                     class="mt-3"
                     group
@@ -18,12 +17,12 @@
                     >
                         <v-card
                                 class="pt-0 mt-0"
-                                color="teal"
+                                :color="$vuetify.theme.dark ? 'grey darken-3' : 'teal'"
                                 dark
                         >
                             <v-list-item two-line>
                                 <v-list-item-avatar color="white" size="48">
-                                    <v-icon color="teal">mdi-bus</v-icon>
+                                    <v-icon :color="$vuetify.theme.dark ? 'teal' : 'teal'">mdi-bus</v-icon>
                                 </v-list-item-avatar>
                                 <v-list-item-content>
                                     <v-container class="pa-0">
@@ -60,7 +59,9 @@
                                     </route-map>
                                 </div>
                             </v-expand-transition>
-                            <v-card-actions class="teal darken-1 text--primary">
+                            <v-card-actions
+                                    :class="$vuetify.theme.dark ? 'grey darken-1 text--primary' : 'teal darken-1 text--primary'"
+                            >
                                 <v-btn
                                         @click="gotoService(getTitle(service_timings[i].service_name))"
                                         icon

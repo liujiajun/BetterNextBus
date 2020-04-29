@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="mt-3">
         <v-card
-                color="teal"
+                :color="$vuetify.theme.dark ? 'grey darken-1' : 'teal'"
                 dark
         >
             <v-card-title class="title pt-2">
@@ -35,7 +35,7 @@
             </v-container>
             <v-list
                     class="pt-1 pb-0"
-                    color="teal darken-1"
+                    :color="$vuetify.theme.dark ? 'grey darken-3' : 'teal darken-1'"
                     dark
                     v-else-if="!moving"
             >

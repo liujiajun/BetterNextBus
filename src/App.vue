@@ -3,7 +3,7 @@
         <v-app>
             <router-view/>
             <v-footer
-                    color="grey lighten-3"
+                    :color="$vuetify.theme.dark ? 'grey darken-4' : 'grey lighten-3'"
                     padless
             >
                 <v-row
@@ -39,7 +39,7 @@
                         About
                     </v-btn>
                     <v-col
-                            class="grey lighten-3 py-4 pt-0 text-center teal--text caption"
+                            class="py-4 pt-0 text-center teal--text caption"
                             cols="12"
                     >
                         <strong>NUSBuses</strong> <br>
@@ -85,6 +85,25 @@
                 this.$ga.enable();
             } else {
                 this.$ga.disable();
+            }
+            if (this.$store.state.enable_dark === 'true') {
+                this.$vuetify.theme.dark = true;
+            } else if (this.$store.state.enable_dark === 'false') {
+                this.$vuetify.theme.dark = false;
+            }
+        },
+        computed: {
+            dark() {
+                return this.$store.state.enable_dark;
+            }
+        },
+        watch: {
+            dark: function () {
+                if (this.dark === 'true') {
+                    this.$vuetify.theme.dark = true;
+                } else if (this.dark === 'false') {
+                    this.$vuetify.theme.dark = false;
+                }
             }
         }
     };

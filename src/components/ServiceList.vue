@@ -4,6 +4,7 @@
                 background-color="transparent"
                 show-arrows
                 v-model="active_tab"
+                color="teal"
         >
             <v-tabs-slider color="teal"></v-tabs-slider>
             <v-tab

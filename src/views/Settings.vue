@@ -4,7 +4,9 @@
             <v-card-title class="headline font-weight-bold teal--text">Settings</v-card-title>
             <v-divider></v-divider>
             <v-card flat>
-                <v-card-title class="title teal--text">Dark mode</v-card-title>
+                <v-badge color="teal" content="Beta" offset-y="30" overlap>
+                    <v-card-title class="title teal--text">Dark mode</v-card-title>
+                </v-badge>
                 <v-card-text>
                     Dark mode creates an experience ideal for the dark.
                 </v-card-text>

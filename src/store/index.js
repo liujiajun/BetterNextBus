@@ -17,7 +17,7 @@ export default new Vuex.Store({
         current_location: null,
         favorites: [],
         enable_analytics: true,
-        enable_dark: 'true',
+        enable_dark: 'false',
         time_and_frequency: [],
         error: false,
         error_message: null

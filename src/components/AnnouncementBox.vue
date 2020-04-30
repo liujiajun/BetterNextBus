@@ -3,7 +3,7 @@
             class="pb-0"
             v-if="alert">
         <v-alert
-                color="teal darken-3"
+                color=""
                 dismissible
                 text
                 v-model="alert"

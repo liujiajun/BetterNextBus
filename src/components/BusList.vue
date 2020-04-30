@@ -60,7 +60,7 @@
                                 </div>
                             </v-expand-transition>
                             <v-card-actions
-                                    :class="$vuetify.theme.dark ? 'grey darken-1 text--primary' : 'teal darken-1 text--primary'"
+                                    :class="$vuetify.theme.dark ? 'grey darken-4 text--primary' : 'teal darken-1 text--primary'"
                             >
                                 <v-btn
                                         @click="gotoService(getTitle(service_timings[i].service_name))"

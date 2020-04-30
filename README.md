@@ -9,8 +9,9 @@
 ## 🍭 Features
 - Service route map
 - Live bus location tracking
-- Bus timings tracking
+- Bus arrival times
 - Favorite list
+- Dark mode
 
 
 ## 🍬 What NUSBuses has (and NUS NextBus doesn't)

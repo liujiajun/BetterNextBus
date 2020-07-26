@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import {getTodayType} from "@/utils/date";
+    // import {getTodayType} from "@/utils/date";
     import ServiceInfoTooltip from "@/components/ServiceInfoTooltip";
 
     export default {
@@ -40,14 +40,13 @@
         },
         computed: {
             firstBusToday: function () {
-                return this.$store.state.time_and_frequency[this.serviceName][getTodayType()]["first"];
+              return "Data not available";
+                //return this.$store.state.time_and_frequency[this.serviceName][getTodayType()]["first"];
             },
             lastBusToday: function () {
-                return this.$store.state.time_and_frequency[this.serviceName][getTodayType()]["last"];
+              return "Data not available";
+                //return this.$store.state.time_and_frequency[this.serviceName][getTodayType()]["last"];
             },
-            // fullDescription: function () {
-            //
-            // }
         }
     };
 </script>

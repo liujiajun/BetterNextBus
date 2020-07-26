@@ -13,7 +13,7 @@
                     <v-skeleton-loader
                             :loading="loading_new"
                             height="148"
-                            type="list-item-avatar-three-line"
+                            type="card-avatar, article, actions"
                     >
                         <v-card
                                 class="pt-0 mt-0"
@@ -90,11 +90,11 @@
 </template>
 
 <script>
-    import {RepositoryFactory} from "@/repository/reposiotry-factory";
-    import RouteMap from "@/components/RouteMap";
-    import AnnouncementBox from "@/components/AnnouncementBox";
+  import {RepositoryFactory} from "@/repository/reposiotry-factory";
+  import RouteMap from "@/components/RouteMap";
+  import AnnouncementBox from "@/components/AnnouncementBox";
 
-    require("promise.prototype.finally").shim();
+  require("promise.prototype.finally").shim();
 
     export default {
         name: "bus-list",

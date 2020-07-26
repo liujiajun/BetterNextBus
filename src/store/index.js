@@ -13,7 +13,7 @@ export default new Vuex.Store({
         active_tab: 0,
         autocomplete_selected: "",
         stop_selected: "UTown",
-        service_selected: "A1",
+        service_selected: "AA1",
         current_location: null,
         favorites: [],
         enable_analytics: true,
